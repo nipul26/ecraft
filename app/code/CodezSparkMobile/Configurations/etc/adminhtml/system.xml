@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="codezsparkmobile" translate="label" sortOrder="201">
+            <label>CodezSpark Mobile</label>
+        </tab>
+        <section id="CodezSparkMobileConfig" translate="label" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Mobile Configuration</label>
+            <tab>codezsparkmobile</tab>
+            <resource>CodezSparkMobile_Configurations::mobile_config</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General</label>
+                <field id="sign_in_text" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Sign In Text</label>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="sign_up_text" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Sign Up Text </label>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="forget_password_text" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Forget Password Text</label>
+                    <validate>required-entry</validate>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
