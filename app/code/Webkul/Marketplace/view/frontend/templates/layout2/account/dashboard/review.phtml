@@ -1,0 +1,66 @@
+<?php
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_Marketplace
+ * @author    Webkul Software Private Limited
+ * @copyright Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+
+/** @var $block \Webkul\Marketplace\Block\Account\Dashboard */
+
+$reviewcollection = $block->getReviewcollection()??[];
+?>
+<div class="wk-comment-n-reviews">
+    <?php if (count($reviewcollection)==0) { ?>
+            <div class="wk-emptymsg">
+                <?= $escaper->escapeHtml(__('No comment & review available')); ?>
+            </div>
+            <?php } else {
+        $index = 0;
+        foreach ($reviewcollection as $keyed) {
+            $name=$block->getCustomer()->load($keyed->getBuyerId())->getName();
+            $index++;
+            ?>
+        <div class="wk-comment-n-review-item">
+            <div class="wk-comment-label">
+                <?= $escaper->escapeHtml($keyed['feed_review']); ?>
+            </div>
+            <span></span>
+            <div class="wk-comment-rating">
+                <div class="wk-info-label">
+                    <div class="wk-rating-icon-small wk-heading" >
+                        <?= $escaper->escapeHtml($keyed['feed_price']/20); ?>
+                    </div>
+                    <div><?= $escaper->escapeHtml("Price"); ?></div>
+                </div>
+                <div class="wk-info-label">
+                    <div class="wk-rating-icon-small wk-heading" >
+                        <?= $escaper->escapeHtml($keyed['feed_value']/20); ?>
+                    </div>
+                    <div><?= $escaper->escapeHtml("Value"); ?></div>
+                </div>
+                <div class="wk-info-label">
+                    <div class="wk-rating-icon-small wk-heading" >
+                        <?= $escaper->escapeHtml($keyed['feed_quality']/20); ?>
+                    </div>
+                    <div><?= $escaper->escapeHtml("Quality"); ?></div>
+                </div>
+            </div>
+            <span></span>
+            <div class="disp-grid small-gap grid-a-r">
+                <div class="wk-heading" >
+                    <?= $escaper->escapeHtml($name);?>
+                </div>
+                <div class="wk-date" >
+                    <?= /* @noEscape */ $block->convertDate($keyed['created_at']) ?>
+                </div>
+            </div>
+        </div>
+            <?php
+        }
+            }
+            ?>
+</div>

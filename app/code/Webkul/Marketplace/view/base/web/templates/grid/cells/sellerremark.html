@@ -1,0 +1,19 @@
+<!--
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_Marketplace
+ * @author    Webkul Software Private Limited
+ * @copyright Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+-->
+<div class="wk-remark-preview">
+    <% _.each(data, function(item) { %>
+        <div>
+            <div class="wk-date"><%= item.created_at %></div>
+            <div><%= item.remark %></div>
+        </div>
+    <% }); %>
+</div>

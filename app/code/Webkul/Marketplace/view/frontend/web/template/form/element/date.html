@@ -1,0 +1,23 @@
+<!--
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_Marketplace
+ * @author    Webkul Software Private Limited
+ * @copyright Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+ -->
+ <input class="input-text" type="text" data-bind="
+    hasFocus: focused,
+    datepicker: { storage: shiftedValue, options: options },
+    attr: {
+        value: shiftedValue,
+        name: inputName,
+        placeholder: placeholder,
+        'aria-describedby': getDescriptionId(),
+        'aria-required': required,
+        'aria-invalid': error() ? true : 'false',
+        disabled: disabled
+    }" >

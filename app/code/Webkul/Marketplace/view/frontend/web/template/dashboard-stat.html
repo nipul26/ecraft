@@ -1,0 +1,192 @@
+<!--
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_Marketplace
+ * @author    Webkul Software Private Limited
+ * @copyright Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+ -->
+ <div class="wk-report-filter">
+    <div class="wk-ask-question">
+        <button class="ask-que-to-admin" data-bind="i18n: askQueToAdminText, event: { click: openAskQueModal}">
+            --
+        </button>
+        <select class="wk-sales-filter" id="wk-sales-filter" data-bind="
+        options: filterOptions,
+        optionsValue: 'id',
+        optionsText: 'name',
+        event: { change: filterStat}
+        ">
+        </select>
+        <div class="wk-daterange-container dispnone" id="date-range">
+            <input class="input-text" type="text" id="date-from" name="from" autocomplete="on">
+            <div class="wk-daterange">-</div>
+            <input class="input-text" type="text" id="date-to" name="to" autocomplete="on">
+        </div>
+        <input type="hidden" name="compFrom" id="compFrom">
+        <input type="hidden" name="compTo" id="compTo">
+    </div>
+</div>
+ <div class="wk-tab-content">
+    <div class="wk-stats">
+        <div class="wk-dashboard-block wk-border">
+            <div class="wk-total-container">
+                <div class="wk-calculation">
+                    <div class="wk-grand-sale" data-bind="i18n: totalSale">
+                        --
+                    </div>
+                    <div class="wk-total-sale">
+                        <div data-bind="attr: {class: saleComparison() >= 0 ? 'wk-info-label wk-arrow-up':'wk-info-label wk-arrow-down'}, i18n: saleGrowth">
+                            --
+                        </div>
+                        <div data-bind="i18n: 'Total Sale'"></div>
+                    </div>
+                </div>
+                <a data-bind="attr: {href: transactionUrl}">
+                    <span data-bind="i18n: 'Transactions'"></span>
+                </a>
+            </div>
+            <div class="wk-earning">
+                <div>
+                    <div class="wk-info-heading" data-bind="i18n: totalPayout">
+                        --
+                    </div>
+                    <div class="wk-info-label" data-bind="i18n: 'Total Payouts'">
+                    </div>
+                </div>
+                <div>
+                    <div class="wk-info-heading" data-bind="i18n: remainingPayout">
+                        --
+                    </div>
+                    <div class="wk-info-label" data-bind="i18n: 'Remaining Payout'">
+                    </div>
+                </div>
+                <div>
+                    <div class="wk-info-heading" data-bind="i18n: commissionPaid">
+                        --
+                    </div>
+                    <div class="wk-info-label" data-bind="i18n: 'Commission Paid'">            
+                    </div>
+                </div>
+            </div>
+            <div class="wk-graph-heading" data-bind="i18n: 'Total Sales over time'">    
+            </div>
+            <div class="wk-graph-chart">
+                <canvas id="saleGraph" ></canvas>
+            </div>
+        </div>
+        <div class="wk-dashboard-block wk-border">
+            <div class="wk-total-container">
+                <div class="wk-calculation">
+                    <div class="wk-grand-sale" data-bind="i18n: totalOrder">
+                        --
+                    </div>
+                    <div class="wk-total-sale">
+                        <div data-bind="attr: {class: orderCountComparison() >= 0 ? 'wk-info-label wk-arrow-up wk-order-count-comparison':'wk-info-label wk-arrow-down wk-order-count-comparison'}, i18n: orderCountGrowth" >
+                            --
+                        </div>
+                        <div data-bind="i18n: 'Total Order'"></div>
+                    </div>
+                </div>
+                <a data-bind="attr: {href: orderUrl}">
+                    <span data-bind="i18n: 'View All Orders'"></span>
+                </a>
+            </div>
+            <div class="wk-earning">
+                <div>
+                    <div class="wk-info-heading" data-bind="i18n: processingOrder">
+                        --
+                    </div>
+                    <div class="wk-info-label" data-bind="i18n: 'Processing'">                    
+                    </div>
+                </div>
+                <div>
+                    <div class="wk-info-heading" data-bind="i18n: completeOrder">
+                        --
+                    </div>
+                    <div class="wk-info-label" data-bind="i18n: 'Complete'">                    
+                    </div>
+                </div>
+                <div>
+                    <div class="wk-info-heading" data-bind="i18n: cancelOrder">
+                        --
+                    </div>
+                    <div class="wk-info-label" data-bind="i18n: 'Cancelled'">
+                    </div>
+                </div>
+            </div>
+            <div class="wk-graph-heading" data-bind="i18n: 'Orders over time'">            
+            </div>
+            <div class="wk-graph-chart">
+                <canvas id="orderCountGraph" ></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="wk-stats">
+        <div class="wk-dashboard-block grid-a-r wk-border">
+            <div class="wk-calculation">
+                <div class="wk-grand-sale" data-bind="i18n: avgOrderValue">
+                    --
+                </div>
+                <div class="wk-total-sale">
+                    <div data-bind="attr: {class: orderValueComparison() >= 0 ? 'wk-info-label wk-arrow-up':'wk-info-label wk-arrow-down'}, i18n: orderValueGrowth">
+                        --
+                    </div>
+                    <div data-bind="i18n: 'Average Order Value'"></div>
+                </div>
+            </div>
+            <div class="wk-graph-heading" data-bind="i18n: 'Average Order Value over time'">
+            </div>
+            <div class="wk-graph-chart">
+                <canvas id="myChart" data-bind="afterRender: initDashboard" ></canvas>
+            </div>
+       </div>
+       <div class="wk-dashboard-block grid-a-r wk-border">
+          <div class="wk-calculation">
+             <div class="wk-grand-sale wk-total-customer" data-bind="i18n: totalCustomer">0</div>
+             <div class="wk-total-sale">
+                <div data-bind="attr: {class: customerComparison() >= 0 ? 'wk-info-label wk-arrow-up wk-customer-comparison':'wk-info-label wk-arrow-down wk-customer-comparison'}, i18n: customerGrowth">
+                    --
+                </div>
+                <div data-bind="i18n: 'Customers'">
+                </div>
+             </div>
+          </div>
+          <div class="wk-graph-heading" data-bind="i18n: 'Top Customers'">
+          </div>
+          <div class="wk-category-container wk-block-height wk-top-customer">
+            <div class="wk-activity">
+                <div class="wk-heading" data-bind="text: loadingText">
+                </div>
+            </div>
+          </div>
+       </div>
+    </div>
+    <div class="wk-stats">
+       <div class="wk-dashboard-block grid-a-r wk-border">
+          <div class="wk-graph-heading" data-bind="i18n: 'Top Selling Products'">
+          </div>
+          <div class="wk-top-product-container wk-block-height wk-top-product">
+            <div class="wk-activity">
+                <div class="wk-heading" data-bind="text: loadingText">
+                </div>
+            </div>
+          </div>
+       </div>
+       <div class="wk-dashboard-block grid-a-r wk-border">
+          <div class="wk-activity-head">
+             <div class="wk-graph-heading" data-bind="i18n: 'Top Categories'">
+             </div>
+          </div>
+          <div class="wk-category-container disp-grid grid-a-r wk-block-height wk-top-category">
+            <div class="wk-activity">
+                <div class="wk-heading" data-bind="text: loadingText">
+                </div>
+            </div>
+          </div>
+       </div>
+    </div>
+ </div>

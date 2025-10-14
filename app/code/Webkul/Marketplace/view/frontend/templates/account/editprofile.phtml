@@ -1,0 +1,908 @@
+<?php
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_Marketplace
+ * @author    Webkul Software Private Limited
+ * @copyright Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+/** @var $block \Webkul\Marketplace\Block\Account\Editprofile */
+$viewModel = $block->getViewModel();
+$helper = $viewModel->getHelper();
+$fulfillmentStatus = $helper->getConfigValue("general_settings", "fulfillment_status");
+$partner = $block->getPersistentData();
+if (empty($partner)) {
+    $partner=$helper->getSeller();
+}
+$profile_hint_status = $helper->getProfileHintStatus();
+$currencySymbol = $helper->getCurrencySymbol();
+$formPostUrl = $block->getUrl(
+    'marketplace/account/editProfilePost',
+    ["_secure" => $block->getRequest()->isSecure()]
+);
+$questIcon = $block->getViewFileUrl('Webkul_Marketplace::images/quest.png');
+$deleteIcon = $block->getViewFileUrl('Webkul_Marketplace::images/deleteIcon.png');
+$countryflag = $block->getViewFileUrl('Webkul_Marketplace::images/country/countryflags/');
+?>
+<form action="<?= $escaper->escapeUrl($formPostUrl) ?>" 
+    enctype="multipart/form-data" 
+    method="post" data-role="form-profile-validate" 
+    data-mage-init='{"validation":{}}'>
+    <div class="wk-mp-design">
+        <fieldset class="fieldset info wk-mp-fieldset">
+            <div data-mage-init='{"formButtonAction": {}}' 
+                class="wk-mp-page-title legend" id="wk-mp-editprofile-form">
+                <span><?= $escaper->escapeHtml(__('Edit Profile Information')) ?></span>
+                <button class="button wk-mp-btn" 
+                    title="<?= $escaper->escapeHtml(__('Save Profile')) ?>" 
+                    type="submit" id="save-btn">
+                    <span><span><?= $escaper->escapeHtml(__('Save Profile')) ?></span></span>
+                </button>
+            </div>
+            <?= $block->getBlockHtml('seller.formkey')?>
+            <?= $block->getBlockHtml('formkey')?>
+            <div class="field profile">
+                <label for="twitterid"><?= $escaper->escapeHtml(__('Twitter ID')) ?> </label>
+                <?php
+                if ($profile_hint_status && $helper->getProfileHintTw()) {?>
+                    <img src="<?= $escaper->escapeUrl($questIcon); ?>" 
+                    class='questimg' 
+                    title="<?= $escaper->escapeHtml($helper->getProfileHintTw()) ?>"/>
+                    <?php
+                } ?>
+                <div class="control">
+                    <input type="text" id="twitter_id" name="twitter_id" 
+                    value="<?= $escaper->escapeHtml($partner['twitter_id']); ?>" 
+                    title="twitterid" class="input-text" />
+                    <input type="checkbox" name="tw_active"
+                    value="1"
+                    title="<?= $escaper->escapeHtml(__('Allow to Display Twitter Icon in Profile Page')) ?>"
+                    <?php if ($partner['tw_active'] == 1): ?> <?= "checked='checked'"; ?> <?php endif; ?>
+                    style="margin-top: 5px;">
+                    <?= $escaper->escapeHtml(__('Allow to Display Twitter Icon in Profile Page')) ?>
+                </div>
+            </div>
+            <div class="field profile">
+                <label for="facebookid"><?= $escaper->escapeHtml(__('Facebook ID')) ?> </label>
+                <?php
+                if ($profile_hint_status && $helper->getProfileHintFb()) {?>
+                    <img src="<?= $escaper->escapeUrl($questIcon); ?>" class='questimg' 
+                    title="<?= $escaper->escapeHtml($helper->getProfileHintFb()) ?>"/>
+                    <?php
+                } ?>
+                <div class="control">
+                    <input type="text" id="facebook_id" name="facebook_id" 
+                    value="<?= $escaper->escapeHtml($partner['facebook_id']); ?>"
+                    title="facebookid" class="input-text" />
+                    <input type="checkbox" name="fb_active" value="1"
+                    title="<?= $escaper->escapeHtml(__('Allow to Display Facebook Icon in Profile Page')) ?>"
+                    <?php if ($partner['fb_active'] == 1):?> <?= "checked='checked'"; ?> <?php endif; ?>
+                    style="margin: 5px;">
+                    <?= $escaper->escapeHtml(__('Allow to Display Facebook Icon in Profile Page')) ?>
+                </div>
+            </div>
+            <div class="field profile">
+                <label><?= $escaper->escapeHtml(__('Instagram ID')) ?> </label>
+                <?php
+                if ($profile_hint_status && $helper->getProfileHintInsta()) {?>
+                    <img src="<?= $escaper->escapeUrl($questIcon); ?>" 
+                    class='questimg' 
+                    title="<?= $escaper->escapeHtml($helper->getProfileHintInsta()) ?>"/>
+                    <?php
+                } ?>
+                <div class="control">
+                    <input type="text" id="instagram_id" 
+                    name="instagram_id" 
+                    value="<?= $escaper->escapeHtml($partner['instagram_id']); ?>"
+                    class="input-text" />
+                    <input type="checkbox" name="instagram_active" value="1"
+                    title="<?= $escaper->escapeHtml(__('Allow to Display Instagram Icon in Profile Page')) ?>"
+                    <?php if ($partner['instagram_active'] == 1):?> <?= "checked='checked'"; ?> <?php endif; ?>
+                    style="margin: 5px;">
+                    <?= $escaper->escapeHtml(__('Allow to Display Instagram Icon in Profile Page')) ?>
+                </div>
+            </div>
+            <div class="field profile">
+                <label><?= $escaper->escapeHtml(__('Youtube ID')) ?> </label>
+                <?php
+                if ($profile_hint_status && $helper->getProfileHintYoutube()) {?>
+                    <img src="<?= $escaper->escapeUrl($questIcon); ?>" 
+                    class='questimg' 
+                    title="<?= $escaper->escapeHtml($helper->getProfileHintYoutube()) ?>"/>
+                    <?php
+                } ?>
+                <div class="control">
+                    <input type="text" id="youtube_id" name="youtube_id" 
+                    value="<?= $escaper->escapeHtml($partner['youtube_id']); ?>"
+                    class="input-text" />
+                    <input type="checkbox" name="youtube_active" value="1"
+                    title="<?= $escaper->escapeHtml(__('Allow to Display Youtube Icon in Profile Page')) ?>"
+                    <?php if ($partner['youtube_active'] == 1):?> <?= "checked='checked'"; ?> <?php endif; ?>
+                    style="margin: 5px;">
+                    <?= $escaper->escapeHtml(__('Allow to Display Youtube Icon in Profile Page')) ?>
+                </div>
+            </div>
+            <div class="field profile">
+                <label><?= $escaper->escapeHtml(__('Vimeo ID')) ?> </label>
+                <?php
+                if ($profile_hint_status && $helper->getProfileHintVimeo()) {?>
+                    <img src="<?= $escaper->escapeUrl($questIcon); ?>" 
+                    class='questimg' 
+                    title="<?= $escaper->escapeHtml($helper->getProfileHintVimeo()) ?>"/>
+                    <?php
+                } ?>
+                <div class="control">
+                    <input type="text" 
+                    id="vimeo_id" name="vimeo_id" 
+                    value="<?= $escaper->escapeHtml($partner['vimeo_id']); ?>"
+                    class="input-text" />
+                    <input type="checkbox" name="vimeo_active" value="1"
+                    title="<?= $escaper->escapeHtml(__('Allow to Display Vimeo Icon in Profile Page')) ?>"
+                    <?php if ($partner['vimeo_active'] == 1):?> <?= "checked='checked'"; ?> <?php endif; ?>
+                    style="margin: 5px;">
+                    <?= $escaper->escapeHtml(__('Allow to Display Vimeo Icon in Profile Page')) ?>
+                </div>
+            </div>
+            <div class="field profile">
+                <label><?= $escaper->escapeHtml(__('Pinterest ID')) ?> </label>
+                <?php
+                if ($profile_hint_status && $helper->getProfileHintPinterest()) {?>
+                    <img src="<?= $escaper->escapeUrl($questIcon); ?>" 
+                    class='questimg' 
+                    title="<?= $escaper->escapeHtml($helper->getProfileHintPinterest()) ?>"/>
+                    <?php
+                } ?>
+                <div class="control">
+                    <input type="text" 
+                    id="pinterest_id" name="pinterest_id" 
+                    value="<?= $escaper->escapeHtml($partner['pinterest_id']); ?>"
+                    class="input-text" />
+                    <input type="checkbox"
+                    name="pinterest_active" value="1"
+                    title="<?= $escaper->escapeHtml(__('Allow to Display Pinterest Icon in Profile Page')) ?>"
+                    <?php if ($partner['pinterest_active'] == 1):?> <?= "checked='checked'"; ?> <?php endif; ?>
+                    style="margin: 5px;">
+                    <?= $escaper->escapeHtml(__('Allow to Display Pinterest Icon in Profile Page')) ?>
+                </div>
+            </div>
+            <div class="field profile">
+                <label><?= $escaper->escapeHtml(__('Moleskine ID')) ?> </label>
+                <?php
+                if ($profile_hint_status && $helper->getProfileHintPinterest()) {?>
+                    <img src="<?= $escaper->escapeUrl($questIcon); ?>"
+                    class='questimg'
+                    title="<?= $escaper->escapeHtml($helper->getProfileHintPinterest()) ?>"/>
+                    <?php
+                } ?>
+                <div class="control">
+                    <input type="text"
+                    id="moleskine_id" name="moleskine_id"
+                    value="<?= $escaper->escapeHtml($partner['moleskine_id']); ?>"
+                    class="input-text" />
+                    <input type="checkbox"
+                    name="moleskine_active" value="1"
+                    title="<?= $escaper->escapeHtml(__('Allow to Display Moleskine Icon in Profile Page')) ?>"
+                    <?php if ($partner['moleskine_active'] == 1):?> <?= "checked='checked'"; ?> <?php endif; ?>
+                    style="margin: 5px;">
+                    <?= $escaper->escapeHtml(__('Allow to Display Moleskine Icon in Profile Page')) ?>
+                </div>
+            </div>
+            <div class="field profile">
+                <label><?= $escaper->escapeHtml(__('Tiktok ID')) ?> </label>
+                <?php
+                if ($profile_hint_status && $helper->getProfileHintPinterest()) {?>
+                    <img src="<?= $escaper->escapeUrl($questIcon); ?>"
+                    class='questimg'
+                    title="<?= $escaper->escapeHtml($helper->getProfileHintPinterest()) ?>"/>
+                    <?php
+                } ?>
+                <div class="control">
+                    <input type="text"
+                    id="tiktok_id" name="tiktok_id"
+                    value="<?= $escaper->escapeHtml($partner['tiktok_id']); ?>"
+                    class="input-text" />
+                    <input type="checkbox"
+                    name="tiktok_active" value="1"
+                    title="<?= $escaper->escapeHtml(__('Allow to Display Tiktok Icon in Profile Page')) ?>"
+                    <?php if ($partner['tiktok_active'] == 1):?> <?= "checked='checked'"; ?> <?php endif; ?>
+                    style="margin: 5px;">
+                    <?= $escaper->escapeHtml(__('Allow to Display Tiktok Icon in Profile Page')) ?>
+                </div>
+            </div>
+            <div class="field profile">
+                <label><?= $escaper->escapeHtml(__('Contact Number')) ?> </label>
+                <?php
+                if ($profile_hint_status && $helper->getProfileHintCn()) {?>
+                    <img src="<?= $escaper->escapeUrl($questIcon); ?>" 
+                    class='questimg' 
+                    title="<?= $escaper->escapeHtml($helper->getProfileHintCn()) ?>"/>
+                    <?php
+                } ?>
+                <div class="control">
+                    <?php
+                    $placeholderTxt = __(
+                        'Enter Contact Number with country code ex: (123) 456-7890'
+                    );
+                    ?>
+                    <input type="text" id="contact_number" 
+                    name="contact_number" 
+                    value="<?= $escaper->escapeHtml($partner['contact_number']); ?>" 
+                    title="<?= $escaper->escapeHtml(__('Enter Contact Number')) ?>" 
+                    class="input-text" 
+                    placeholder="<?= $escaper->escapeHtml($placeholderTxt) ?>"/>
+                </div>
+            </div>
+            <div class="field profile">
+                <label><?= $escaper->escapeHtml(__('Tax/VAT Number')) ?> </label>
+                <?php
+                if ($profile_hint_status && $helper->getProfileHintTax()) {?>
+                    <img src="<?= $escaper->escapeUrl($questIcon); ?>" 
+                    class='questimg' 
+                    title="<?= $escaper->escapeHtml($helper->getProfileHintTax()) ?>"/>
+                    <?php
+                } ?>
+                <div class="control">
+                    <input type="text" 
+                    id="taxvat" name="taxvat" 
+                    value="<?= $escaper->escapeHtml($partner['taxvat']); ?>" 
+                    title="<?= $escaper->escapeHtml(__('Enter Tax or VAT number')) ?>" 
+                    class="input-text" 
+                    placeholder="<?= $escaper->escapeHtml(__('Enter Tax or VAT number')) ?>"/>
+                </div>
+            </div>
+            <?php
+            if ($helper->getActiveColorPicker()) {?>
+                <div class="field profile">
+                    <label for="background_width"><?= $escaper->escapeHtml(__('Theme : Background Color')) ?> </label>
+                    <?php
+                    if ($profile_hint_status && $helper->getProfileHintBc()) {?>
+                        <img src="<?= $escaper->escapeUrl($questIcon); ?>" 
+                        class='questimg' 
+                        title="<?= $escaper->escapeHtml($helper->getProfileHintBc()) ?>"/>
+                        <?php
+                    } ?>
+                    <div class="control">
+                        <input type="text" id="background_width" 
+                        name="background_width" 
+                        value="<?= $escaper->escapeHtml($partner['background_width']); ?>" 
+                        title="background_width" class="input-text" />
+                        <span class="color-pick" 
+                        data-role="color-pick" 
+                        data-mage-init='{
+                            "colorPickerFunction":{
+                                "spanBackgroundColor" : "<?= $escaper
+                                ->escapeHtml($partner['background_width'])?>",
+                                "getActiveColorPickerStatus" : "<?= $escaper
+                                ->escapeHtml($helper->getActiveColorPicker())?>",
+                                "backgroundWidthSelector" : "#background_width"
+                            }
+                        }'>
+                        </span>
+                    </div>
+                </div>
+                <?php
+            } ?>
+            <div class="field profile">
+                <label for="shoptitle"><?= $escaper->escapeHtml(__('Shop Title')) ?></label>
+                <?php
+                if ($profile_hint_status && $helper->getProfileHintShop()) {?>
+                    <img src="<?= $escaper->escapeUrl($questIcon); ?>" 
+                    class='questimg' 
+                    title="<?= $escaper->escapeHtml($helper->getProfileHintShop()) ?>"/>
+                    <?php
+                } ?>
+                <div class="control">
+                    <input type="text" id="shop_title" 
+                    name="shop_title" 
+                    value="<?= $escaper->escapeHtml($partner['shop_title']); ?>" 
+                    title="<?= $escaper->escapeHtml(__('Shop Title'))?>" 
+                    class="input-text" />
+                </div>
+            </div>
+            <div class="field profile">
+                <label for="shoptitle"><?= $escaper->escapeHtml(__('Low Stock Quantity')) ?></label>
+                <div class="control">
+                    <input type="text" id="low_stock_quantity" 
+                    name="low_stock_quantity" 
+                    value="<?= $escaper->escapeHtml($partner['low_stock_quantity']); ?>" 
+                    title="<?= $escaper->escapeHtml(__('Low Stock Quantity'))?>" 
+                    class="input-text required-entry validate-not-negative-number" />
+                </div>
+            </div>
+
+            <?php if ($fulfillmentStatus) { ?>
+            <div class="field profile">
+                <label for="logo-pic"> <?= $escaper->escapeHtml(__('Fulfilment Image')) ?> </label>
+                <div class="control">
+                    <input type="file" id="logo-pic" 
+                    alt="no image" name="fulfilment_image" 
+                    title="<?= $escaper->escapeHtml(__('Fulfilment Image'))?>" 
+                    class="banner" size="26"/>
+                    <div class="logoimage-set">
+                        <div class="setimage">
+                            <img
+                            src="<?= $escaper
+                            ->escapeUrl($helper->getMediaUrl().'avatar/'.$partner['fulfilment_image']); ?>"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <?php ?>
+            <div class="field profile">
+                <label for="shoptitle"><?= $escaper->escapeHtml(__('Fulfilment Text')) ?></label>
+                <?php $fulfilmentText = $partner['fulfilment_text']?:__("This product is fulfilled by seller");?>
+                <div class="control">
+                    <input type="text"
+                    name="fulfilment_text" 
+                    value="<?= $escaper->escapeHtml($fulfilmentText); ?>" 
+                    title="<?= $escaper->escapeHtml(__('Fulfilment Text'))?>" 
+                    class="input-text" />
+                </div>
+            </div>
+            <?php }?>
+            <div class="field profile">
+                <label for="banner-pic"> <?= $escaper->escapeHtml(__('Company Banner')) ?> </label>
+                <?php
+                if ($profile_hint_status && $helper->getProfileHintBanner()) {?>
+                    <img src="<?= $escaper->escapeUrl($questIcon); ?>" 
+                    class='questimg' 
+                    title="<?= $escaper->escapeHtml($helper->getProfileHintBanner()) ?>"/>
+                    <?php
+                } ?>
+                <div class="control">
+                    <input type="file" id="banner-pic" name="banner_pic"  title="Banner Pic" class="banner" size="26" />
+                    <div class="profileimage-set">
+                          <div class="setimage">
+                            <img class="wk-banner" 
+                            alt=" <?= $escaper->escapeHtml(__('no image')) ?>" 
+                            src="<?= $escaper->escapeUrl($helper->getMediaUrl().'avatar/'.$partner['banner_pic']); ?>"/>
+                            <?php
+                            $bannerpic = $partner['banner_pic'];
+                            $logopic = $partner['logo_pic'];
+
+                            if ($bannerpic && !$partner['is_default_banner']) {
+                                ?>
+                                <span class="wk-profileimagedelete" 
+                                    title="<?= $escaper->escapeHtml(__('Delete'))?>">
+                                    <img src="<?= $escaper->escapeUrl($deleteIcon); ?>" 
+                                    alt="<?= $escaper->escapeHtml(__('Delete Image'))?>" 
+                                    title="<?= $escaper->escapeHtml(__('Delete Image'))?>"/>
+                                </span>
+                                <?php
+                            }?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="field profile">
+                <label for="logo-pic"> <?= $escaper->escapeHtml(__('Company Logo')) ?> </label>
+                <?php
+                if ($profile_hint_status && $helper->getProfileHintLogo()) {?>
+                    <img src="<?= $escaper->escapeUrl($questIcon); ?>" 
+                    class='questimg' 
+                    title="<?= $escaper->escapeHtml($helper->getProfileHintLogo()) ?>"/>
+                    <?php
+                } ?>
+                <div class="control">
+                    <input type="file" id="logo-pic" 
+                    alt="no image" name="logo_pic" 
+                    title="<?= $escaper->escapeHtml(__('Seller Logo'))?>" 
+                    class="banner" size="26"/>
+                    <div class="logoimage-set">
+                        <div class="setimage">
+                            <img class="prev-img" 
+                            src="<?= $escaper
+                            ->escapeUrl($helper->getMediaUrl().'avatar/'.$partner['logo_pic']); ?>"/>
+                            <?php
+                            if ($logopic && !$partner['is_default_logo']) {
+                                ?>
+                                <span class="wk-logoimagedelete" 
+                                    title="<?= $escaper->escapeHtml(__('Delete'))?>">
+                                    <img src="<?= $escaper
+                                    ->escapeUrl($deleteIcon); ?>" 
+                                    alt="<?= $escaper->escapeHtml(__('Delete Image'))?>" 
+                                    title="<?= $escaper->escapeHtml(__('Delete Image'))?>"/>
+                                </span>
+                                <?php
+                            }?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="field profile">
+                <label for="company_locality"><?= $escaper->escapeHtml(__('Company Locality')) ?></label>
+                <?php
+                if ($profile_hint_status && $helper->getProfileHintLoc()) {?>
+                    <img src="<?= $escaper->escapeUrl($questIcon); ?>"   class='questimg' 
+                    title="<?= $escaper->escapeHtml($helper->getProfileHintLoc()) ?>"/>
+                    <?php
+                } ?>
+                <div class="control">
+                    <input type="text" id="company_locality" 
+                    name="company_locality" 
+                    value="<?= $escaper->escapeHtml($partner['company_locality']); ?>" 
+                    title="company_locality" 
+                    class="input-text" />
+                </div>
+            </div>
+            <div class="field profile">
+                <label for="company_description"><?= $escaper->escapeHtml(__('Company Description')) ?></label>
+                <?php
+                if ($profile_hint_status && $helper->getProfileHintDesc()) {?>
+                    <img src="<?= $escaper->escapeUrl($questIcon); ?>" 
+                    class='questimg' 
+                    title="<?= $escaper->escapeHtml($helper->getProfileHintDesc()) ?>"/>
+                    <?php
+                } ?>
+                <div class="control wk-border-box-sizing">
+                    <textarea type="text" id="company_description" 
+                    name="company_description" title="company_description" 
+                    class="input-text compdesi" >
+                        <?= $escaper->escapeHtml($partner['company_description']); ?>
+                    </textarea>
+                    <?php if ($helper->isWysiwygEnabled()): ?>
+                        <script>
+                            require([
+                                "jquery",
+                                "mage/translate",
+                                "mage/adminhtml/events",
+                                "mage/adminhtml/wysiwyg/tiny_mce/setup"
+                            ], function(jQuery) {
+                                wysiwygCompanyDescription = new wysiwygSetup("company_description", {
+                                    "width" : "100%",
+                                    "height" : "200px",
+                                    "plugins" : [{"name":"image"}],
+                                    "tinymce" : {
+                                        "toolbar":"formatselect | bold italic underline | "+
+                                        "alignleft aligncenter alignright |" + 
+                                        "bullist numlist |"+
+                                        "link table charmap","plugins":"advlist "+
+                                        "autolink lists link charmap media noneditable table "+
+                                        "contextmenu paste code help table",
+                                    },
+                                    files_browser_window_url: "<?= $escaper
+                                    ->escapeUrl($block->getWysiwygUrl());?>"
+                                });
+                                wysiwygCompanyDescription.setup("exact");
+                            });
+                        </script>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <?php
+            if ($helper->getSellerPolicyApproval()) {?>
+                <div class="field profile">
+                    <label><?= $escaper->escapeHtml(__('Return Policy')) ?></label>
+                    <?php
+                    if ($profile_hint_status && $helper->getProfileHintReturnPolicy()) {?>
+                        <img src="<?= $escaper->escapeUrl($questIcon); ?>" 
+                        class='questimg' 
+                        title="<?= $escaper->escapeHtml($helper->getProfileHintReturnPolicy()) ?>"/>
+                        <?php
+                    } ?>
+                    <div class="control">
+                        <textarea type="text" id="return_policy" 
+                        name="return_policy" 
+                        title="<?= $escaper->escapeHtml(__('Return Policy')) ?>" 
+                        class="input-text compdesi" >
+                            <?= $escaper->escapeHtml($partner['return_policy']); ?>
+                        </textarea>
+                        <?php if ($helper->isWysiwygEnabled()): ?>
+                            <script>
+                                require([
+                                    "jquery",
+                                    "mage/translate",
+                                    "mage/adminhtml/events",
+                                    "mage/adminhtml/wysiwyg/tiny_mce/setup"
+                                ], function(jQuery) {
+                                    wysiwygCompanyDescription = new wysiwygSetup("return_policy", {
+                                        "width" : "100%",
+                                        "height" : "200px",
+                                        "plugins" : [{"name":"image"}],
+                                        "tinymce" : {
+                                            "toolbar":"formatselect | bold italic underline | "+
+                                            "alignleft aligncenter alignright |" + 
+                                            "bullist numlist |"+
+                                            "link table charmap","plugins":"advlist "+
+                                            "autolink lists link charmap media noneditable table "+
+                                            "contextmenu paste code help table",    
+                                        },
+                                        files_browser_window_url: "<?= $escaper
+                                        ->escapeUrl($block->getWysiwygUrl());?>"
+                                    });
+                                    wysiwygCompanyDescription.setup("exact");
+                                });
+                            </script>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <div class="field profile">
+                    <label><?= $escaper->escapeHtml(__('Shipping Policy')) ?></label>
+                    <?php
+                    if ($profile_hint_status && $helper->getProfileHintShippingPolicy()) {?>
+                        <img src="<?= $escaper->escapeUrl($questIcon); ?>" 
+                        class='questimg' 
+                        title="<?= $escaper->escapeHtml($helper->getProfileHintShippingPolicy()) ?>"/>
+                        <?php
+                    } ?>
+                    <div class="control">
+                        <textarea type="text" id="shipping_policy" 
+                        name="shipping_policy" title="<?= $escaper->escapeHtml(__('Shipping Policy')) ?>" 
+                        class="input-text compdesi" >
+                            <?= $escaper->escapeHtml($partner['shipping_policy']); ?>
+                        </textarea>
+                        <?php if ($helper->isWysiwygEnabled()): ?>
+                            <script>
+                                require([
+                                    "jquery",
+                                    "mage/translate",
+                                    "mage/adminhtml/events",
+                                    "mage/adminhtml/wysiwyg/tiny_mce/setup"
+                                ], function(jQuery) {
+                                    wysiwygCompanyDescription = new wysiwygSetup("shipping_policy", {
+                                        "width" : "100%",
+                                        "height" : "200px",
+                                        "plugins" : [{"name":"image"}],
+                                        "tinymce" : {
+                                            "toolbar":"formatselect | bold italic underline | "+
+                                            "alignleft aligncenter alignright |" + 
+                                            "bullist numlist |"+
+                                            "link table charmap","plugins":"advlist "+
+                                            "autolink lists link charmap media noneditable table "+
+                                            "contextmenu paste code help table",
+                                        },
+                                        files_browser_window_url: "<?= $escaper
+                                        ->escapeUrl($block->getWysiwygUrl());?>"
+                                    });
+                                    wysiwygCompanyDescription.setup("exact");
+                                });
+                            </script>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <div class="field profile">
+                    <label><?= $escaper->escapeHtml(__('Privacy Policy')) ?></label>
+                    <div class="control">
+                        <textarea type="text" id="privacy_policy" 
+                        name="privacy_policy" 
+                        title="<?= $escaper->escapeHtml(__('Privacy Policy')) ?>" 
+                        class="input-text compdesi" >
+                            <?= $escaper->escapeHtml($partner['privacy_policy']); ?>
+                        </textarea>
+                         <?php if ($helper->isWysiwygEnabled()): ?>
+                            <script>
+                                require([
+                                    "jquery",
+                                    "mage/translate",
+                                    "mage/adminhtml/events",
+                                    "mage/adminhtml/wysiwyg/tiny_mce/setup"
+                                ], function(jQuery) {
+                                    wysiwygCompanyDescription = new wysiwygSetup("privacy_policy", {
+                                        "width" : "100%",
+                                        "height" : "200px",
+                                        "plugins" : [{"name":"image"}],
+                                        "tinymce" : {
+                                            "toolbar":"formatselect | bold italic underline | "+
+                                            "alignleft aligncenter alignright |" + 
+                                            "bullist numlist |"+
+                                            "link table charmap","plugins":"advlist "+
+                                            "autolink lists link charmap media noneditable table "+
+                                            "contextmenu paste code help table",
+                                        },
+                                        files_browser_window_url: "<?= $escaper
+                                        ->escapeUrl($block->getWysiwygUrl());?>"
+                                    });
+                                    wysiwygCompanyDescription.setup("exact");
+                                });
+                            </script>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <?php
+            } ?>
+
+            <div class="field profile">
+                <label for="country_pic"> <?= $escaper->escapeHtml(__('Country')) ?> </label>
+                <?php
+                if ($profile_hint_status && $helper->getProfileHintCountry()) {?>
+                    <img src="<?= $escaper->escapeUrl($questIcon); ?>" 
+                    class='questimg' 
+                    title="<?= $escaper->escapeHtml($helper->getProfileHintCountry()) ?>"/>
+                    <?php
+                } ?>
+                <div class="control">
+                    <select name="country_pic" id="country-pic">
+                        <option value="" selected="selected" disabled="disabled">
+                            <?= $escaper->escapeHtml(__('Select Country'))?>
+                        </option>
+                    <?php foreach ($block->getCountryOptionArray() as $country) {?>
+                        <option <?php
+                        if ($country['value']!='') { ?>
+                            <?= ($partner['country_pic']==$country['value']?"selected='selected'":""); ?>
+                            value="<?= $escaper->escapeHtml($country['value']); ?>">
+                            <?= $escaper->escapeHtml($country['label']);?>
+                            </option>
+                            <?php
+                        }
+                    } ?>
+                    </select>
+                    <img class="country_img_prev" alt="no image" 
+                    src="<?= $escaper->escapeHtml($countryflag."/".strtoupper(
+                        $partner['country_pic']==""?"xx":$partner['country_pic']
+                    ).".png"); ?>"/>
+                </div>
+            </div>
+            <div class="field profile">
+                <label for="meta_keywords"><?= $escaper->escapeHtml(__('Meta Keywords')) ?></label>
+                <label class="control-notification">
+                (<?= $escaper->escapeHtml(__("Enter Meta Keywords Comma(',') Separated..")); ?>)
+                </label>
+                <?php
+                if ($profile_hint_status && $helper->getProfileHintMeta()) {?>
+                    <img src="<?= $escaper->escapeUrl($questIcon); ?>" 
+                    class='questimg' 
+                    title="<?= $escaper->escapeHtml($helper->getProfileHintMeta()) ?>"/>
+                    <?php
+                } ?>
+                <div class="control">
+                    <textarea type="text" id="meta_keywords" 
+                    name="meta_keyword" title="Meta Keyword" 
+                    class="input-text compdesi"><?= $escaper->escapeHtml($partner['meta_keyword']); ?></textarea>
+                </div>
+            </div>
+            <div class="field profile">
+                <label for="meta_description"><?= $escaper->escapeHtml(__('Meta Description')) ?></label>
+                <?php
+                if ($profile_hint_status && $helper->getProfileHintMetaDesc()) {?>
+                    <img src="<?= $escaper->escapeUrl($questIcon); ?>" 
+                    class='questimg' 
+                    title="<?= $escaper->escapeHtml($helper->getProfileHintMetaDesc()) ?>"/>
+                    <?php
+                } ?>
+                <div class="control">
+                    <textarea type="text" id="meta_description"
+                    name="meta_description" title="Meta Description"
+                    class="input-text compdesi"><?= $escaper->escapeHtml($partner['meta_description']); ?></textarea>
+                </div>
+            </div>
+            <legend class="legend">
+                <span><?= $escaper->escapeHtml(__('Payment Information')) ?></span>
+            </legend>
+            <div class="field">
+                <label><?= $escaper->escapeHtml(__('Payment Details')) ?></label>
+                <?php
+                if ($profile_hint_status && $helper->getProfileHintBank()) {?>
+                    <img src="<?= $escaper->escapeUrl($questIcon); ?>" 
+                    class='questimg' 
+                    title="<?= $escaper->escapeHtml($helper->getProfileHintBank()) ?>"/>
+                    <?php
+                } ?>
+                <div class="control">
+                    <textarea class="input-text" name="payment_source" 
+                    id="payment-source" title="payment source" 
+                    cols="1" rows="3" ><?= $escaper->escapeHtml($partner['payment_source']); ?></textarea>
+                </div>
+            </div>
+            <?php if ($helper->getAnalyticStatus()) { ?>
+                <div class="field">
+                    <label class="label"><?= $escaper->escapeHtml(__('Google Analytic Id')) ?></label>
+                    <div class="control">
+                        <input type="text" 
+                        class="input-text" 
+                        name="analytic_id" title="Google Analytic Id" 
+                        value ="<?= $escaper->escapeHtml($block->getAnalyticId()) ?>" 
+                        id="analytic_id" />
+                    </div>
+                </div>
+            <?php } ?>
+        </fieldset>
+    </div>
+</form>
+<?php
+$profileUrl = 'marketplace/seller/profile/shop/'.$partner['shop_url'];
+$collectionUrl = 'marketplace/seller/collection/shop/'.$partner['shop_url'];
+$feedbackUrl = 'marketplace/seller/feedback/shop/'.$partner['shop_url'];
+$locationUrl = 'marketplace/seller/location/shop/'.$partner['shop_url'];
+$policyUrl = 'marketplace/seller/policy/shop/'.$partner['shop_url'];
+
+if ($helper->getUrlRewrite()) { ?>
+    <br><br>
+    <?php
+    $rewriteUrl = $block->getUrl(
+        'marketplace/account/rewriteUrlPost',
+        ["_secure" => $block->getRequest()->isSecure()]
+    );
+    ?>
+    <form action="<?= $escaper->escapeUrl($rewriteUrl) ?>" 
+        enctype="multipart/form-data" method="post" 
+        data-role="form-urlrewrite-validate" 
+        data-mage-init='{"validation":{}}'>
+        <div class="page-title" style="width:100%;display:inline-block;">
+            <h2 style="float:left;">
+                <?= $escaper->escapeHtml(__('Manage Your Shop Url')) ?>
+            </h2>
+            <button class="button wk-mp-btn" 
+                title="<?= $escaper->escapeHtml(__('Set Your New Shop Url')) ?>" 
+                type="submit" style="float:right;">
+                <span><span><?= $escaper->escapeHtml(__('Save Url')) ?></span></span>
+            </button>
+        </div>
+        <?= $block->getBlockHtml('seller.formkey')?>
+        <?= $block->getBlockHtml('formkey')?>
+        <div class="wk-mp-design">
+            <fieldset class="fieldset info wk-mp-fieldset">
+                <legend class="legend"><span><?= $escaper->escapeHtml(__('Edit Your Shop Url')) ?></span></legend>
+                <div class="field">
+                    <label><?= $escaper->escapeHtml(__('Profile Page Target Url Path')) ?></label>
+                    <div class="control">
+                        <input type="text" class="input-text" 
+                        value="<?= $escaper->escapeHtml($profileUrl) ?>" readonly/>
+                    </div>
+                </div>
+                <div class="field">
+                    <label><?= $escaper->escapeHtml(__('Profile Page Request Url Path')) ?></label>
+                    <div class="control">
+                        <input type="text" class="input-text" 
+                        name="profile_request_url" id="profile_request_url" 
+                        value="<?= $escaper->escapeHtml($helper->getRewriteUrlPath($profileUrl)) ?>"/>
+                    </div>
+                </div>
+                <div class="field">
+                    <label><?= $escaper->escapeHtml(__('Collection Page Target Url Path')) ?></label>
+                    <div class="control">
+                        <input type="text" class="input-text" 
+                        value="<?= $escaper->escapeHtml($collectionUrl) ?>" readonly/>
+                    </div>
+                </div>
+                <div class="field">
+                    <label><?= $escaper->escapeHtml(__('Collection Page Request Url Path')) ?></label>
+                    <div class="control">
+                        <input type="text" class="input-text" 
+                        name="collection_request_url" id="collection_request_url" 
+                        value="<?= $escaper->escapeHtml($helper->getRewriteUrlPath($collectionUrl)) ?>"/>
+                    </div>
+                </div>
+                <div class="field">
+                    <label><?= $escaper->escapeHtml(__('Review Page Target Url Path')) ?></label>
+                    <div class="control">
+                        <input type="text" class="input-text" 
+                        value="<?= $escaper->escapeHtml($feedbackUrl); ?>" readonly/>
+                    </div>
+                </div>
+                <div class="field">
+                    <label><?= $escaper->escapeHtml(__('Review Page Request Url Path')) ?></label>
+                    <div class="control">
+                        <input type="text" class="input-text" 
+                        name="review_request_url" id="review_request_url" 
+                        value="<?= $escaper->escapeHtml($helper->getRewriteUrlPath($feedbackUrl)) ?>"/>
+                    </div>
+                </div>
+                <div class="field">
+                    <label><?= $escaper->escapeHtml(__('Location Page Target Url Path')) ?></label>
+                    <div class="control">
+                        <input type="text" class="input-text" 
+                        value="<?= $escaper->escapeHtml($locationUrl); ?>" readonly/>
+                    </div>
+                </div>
+                <div class="field">
+                    <label><?= $escaper->escapeHtml(__('Location Page Request Url Path')) ?></label>
+                    <div class="control">
+                        <input type="text" class="input-text" 
+                        name="location_request_url" id="location_request_url" 
+                        value="<?= $escaper->escapeHtml($helper->getRewriteUrlPath($locationUrl)) ?>"/>
+                    </div>
+                </div>
+                <div class="field">
+                    <label><?= $escaper->escapeHtml(__('Privacy Policy Page Request Url Path')) ?></label>
+                    <div class="control">
+                        <input type="text" class="input-text" 
+                        name="policy_request_url" id="policy_request_url" 
+                        value="<?= $escaper->escapeHtml($helper->getRewriteUrlPath($policyUrl)) ?>"/>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </form>
+    <?php
+}
+?>
+<br><br>
+<?php if ($helper->getMinOrderSettings()): ?>
+    <?php
+    $saveMinOrderUrl = $block->getUrl(
+        'marketplace/account/saveMinOrder',
+        ["_secure" => $block->getRequest()->isSecure()]
+    );
+    ?>
+    <form action="<?= $escaper->escapeUrl($saveMinOrderUrl) ?>" 
+    method="post" data-mage-init='{"validation":{}}'>
+        <div class="wk-mp-page-title page-title">
+            <h2><?= $escaper->escapeHtml(__('Set Minimum Order Amount')) ?></h1>
+            <button class="button wk-mp-btn" 
+            title="<?= $escaper->escapeHtml(__('Save')) ?>" type="submit">
+                <span><span><?= $escaper->escapeHtml(__('Save')) ?></span></span>
+            </button>
+        </div>
+        <?= $block->getBlockHtml('seller.formkey')?>
+        <?= $block->getBlockHtml('formkey')?>
+        <div class="wk-mp-design">
+            <fieldset class="fieldset info wk-mp-fieldset">
+                <div class="field required">
+                    <label class="label">
+                    <?= $escaper->escapeHtml(__('Minimum Amount')) ?>
+                    <b><?= $escaper->escapeHtml(" (".$currencySymbol.")"); ?></b>
+                    </label>
+                    <div class="control">
+                        <input type="text" 
+                        class="input-text validate-number required-entry validate-greater-than-zero" 
+                        name="min_order_amount" title="Minimum Order Amount" 
+                        value ="<?= $escaper->escapeHtml($block->getMinimumOrderValue())?>" 
+                        id="min_order_amount" />
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </form>
+    <br><br>
+<?php endif; ?>
+<?= $block->getChildHtml(); ?>
+<div class="field profile wk-profile-links-container">
+    <div class="wk-profile-links">
+        <a class="btn-primary" 
+        href="<?= $escaper->escapeHtml($helper->getRewriteUrl($profileUrl)); ?>" 
+        target="_blank"><?= $escaper->escapeHtml(__('View Profile')) ?></a>
+    </div>
+    <div class="wk-profile-links">
+        <a class="btn-primary" 
+            href="<?= $escaper->escapeHtml($helper->getRewriteUrl($collectionUrl)); ?>"
+             target="_blank"><?= $escaper->escapeHtml(__('View Collection')) ?></a>
+    </div>
+</div>
+<div class="buttons-set">
+    <p class="back-link">
+        <a href="javascript:;" 
+            onclick="javascript: window.history.back();" 
+            class="left">&laquo; <?= $escaper->escapeHtml(__('Back')) ?></a>
+    </p>
+</div>
+<?php
+$formData = [
+    'countryPicSelector' => '#country-pic',
+    'countryImgPrevSelector' => '.country_img_prev',
+    'countryLatitudeSelector' => '#country-latitude',
+    'countryLongitudeSelector' => '#country-longitude',
+    'countryImgPrev' => $block->getViewFileUrl("Webkul_Marketplace::images/country/countryflags/"),
+    'backgroundWidthSelector' => '#background_width',
+    'logoPicSelector' => '#logo-pic',
+    'bannerPicSelector' => '#banner-pic',
+    'leftButtonSelector' => '.left',
+    'buttonsSetLastSelector' => '.buttons-set:last',
+    'inputTextSelector' => '.input-text',
+    'profileimageSetSpanSelector' => '.profileimage-set span',
+    'bannerSelector' => '.wk-banner',
+    'bannerDeleteAjaxUrl' => $block->getUrl(
+        'marketplace/account/deleteSellerBanner',
+        ['_secure' => $block->getRequest()->isSecure()]
+    ),
+    'setimageSelector' => '.setimage',
+    'profileImageDeleteSelector' => '.wk-profileimagedelete img',
+    'logoImageSetSpanSelector' => '.logoimage-set span',
+    'logoSelector' => '.wk-logo',
+    'logoDeleteAjaxUrl' => $block->getUrl(
+        'marketplace/account/deleteSellerLogo',
+        ['_secure' => $block->getRequest()->isSecure()]
+    ),
+    'logoImageDeleteSelector' => '.wk-logoimagedelete img'
+];
+$serializedFormData = $viewModel->getJsonHelper()->jsonEncode($formData);
+?>
+
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "editSellerProfile": <?= /* @noEscape */ $serializedFormData; ?>
+        }
+    }
+</script>

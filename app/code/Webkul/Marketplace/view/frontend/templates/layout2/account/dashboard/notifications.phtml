@@ -1,0 +1,49 @@
+<?php
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_Marketplace
+ * @author    Webkul Software Private Limited
+ * @copyright Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+/** @var $block \Webkul\Marketplace\Block\Page\Notofications */
+$allNotification = $block->getAllNotification();
+?>
+<div class="wk-dashboard-block grid-a-r wk-border">
+    <div class="wk-activity-head">
+        <div class="wk-heading">
+            <?= $escaper->escapeHtml(__('Activities')) ?>
+        </div>
+        <div>
+            <a href="<?= $escaper->escapeUrl($block->getUrl("marketplace/account/notification"))?>">
+                <?= $escaper->escapeHtml(__('View All Activities')) ?>
+            </a>
+        </div>
+    </div>
+    <div class="wk-activities wk-block-height">
+        <?php if (count($allNotification) <= 0) {
+            ?>
+            <div class="wk-activity">
+                <div class="wk-heading">
+                    <?= $escaper->escapeHtml(__("No Notification found")); ?>
+                </div>
+            </div>
+            <?php
+        }
+        ?>
+        <?php foreach ($allNotification as $notification):
+                $notificationInfo = $block->getNotificationDetail($notification);
+            ?>
+            <div class="wk-activity">
+                <div class="wk-heading">
+                    <?= $escaper->escapeHtml(ucfirst($notificationInfo["message"])); ?>
+                </div>
+                <div class="wk-date">
+                    <?= $escaper->escapeHtml($notificationInfo["date"]); ?>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</div>

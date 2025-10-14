@@ -1,0 +1,76 @@
+<?php
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_Marketplace
+ * @author    Webkul Software Private Limited
+ * @copyright Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+$sellerBlock = $block->getLayout()->createBlock(
+    \Webkul\Marketplace\Block\Adminhtml\Items\Column\Name\Seller::class
+);
+$viewModel = $block->getViewModel();
+$helper = $viewModel->getCatalogHelperData();
+if ($_item = $block->getItem()): ?>
+    <div class="product-title"><?= $escaper->escapeHtml($_item->getName()) ?></div>
+    <div class="product-sku-block">
+        <span><?= $escaper->escapeHtml(__('SKU')) ?>:</span>
+        <?= $escaper->escapeHtml(implode('<br />', $helper->splitSku($block->getSku()))) ?>
+
+        <!-- Marketplace seller Name -->
+        <br>
+        <?php
+            $userInfo = $sellerBlock->getUserInfo($_item->getProductId());
+        if (!empty($userInfo)) { ?>
+                <strong>
+                    <?= $escaper->escapeHtml(__('By Seller')) ?>:
+                </strong>
+                <a href=<?= $escaper->escapeUrl($sellerBlock->getCustomerUrl($userInfo['id']));?>>
+                    <?= $escaper->escapeHtml($userInfo['name'])?>
+                </a>
+                <?php
+        } ?>
+        <!-- end -->
+    </div>
+    <?php if ($block->getOrderOptions()): ?>
+        <dl class="item-options">
+        <?php foreach ($block->getOrderOptions() as $_option): ?>
+            <dt><?= $escaper->escapeHtml($_option['label']) ?>:</dt>
+            <dd>
+            <?php if (isset($_option['custom_view']) && $_option['custom_view']): ?>
+                <?= $escaper->escapeHtml($_option['value']) ?>
+            <?php else: ?>
+                <?= $escaper->escapeHtml($block->truncateString($_option['value'], 55, '', $_remainder)) ?>
+                <?php if ($_remainder):?>
+                    ... <span id="<?= $escaper->escapeHtmlAttr($_id = 'id' . uniqid()) ?>">
+                    <?= $escaper->escapeHtml($_remainder) ?></span>
+                    <script>
+                        require(['prototype'], function(){
+                            <?php $escapedId = $escaper->escapeJs($_id) ?>
+                            $('<?= /* @noEscape */ $escapedId ?>').hide();
+                            $('<?= /* @noEscape */ $escapedId ?>').up()
+                            .observe('mouseover', function(){$('<?= /* @noEscape */ $escapedId ?>').show();});
+                            $('<?= /* @noEscape */ $escapedId ?>').up()
+                            .observe('mouseout',  function(){$('<?= /* @noEscape */ $escapedId ?>').hide();});
+                        });
+                    </script>
+                <?php endif;?>
+            <?php endif;?>
+            </dd>
+        <?php endforeach; ?>
+        </dl>
+    <?php endif; ?>
+    <?php if ($block->getLinks()): ?>
+        <dl class="item-options">
+            <dt><?= $escaper->escapeHtml($block->getLinksTitle()) ?>:</dt>
+            <?php foreach ($block->getLinks()->getPurchasedItems() as $_link): ?>
+                <dd><?= $escaper->escapeHtml($_link->getLinkTitle()) ?> (<?= $escaper->escapeHtml($_link
+                ->getNumberOfDownloadsUsed() . ' / ' . ($_link->getNumberOfDownloadsBought()
+                ? $_link->getNumberOfDownloadsBought() : __('U'))) ?>)</dd>
+            <?php endforeach; ?>
+        </dl>
+    <?php endif; ?>
+    <?= $escaper->escapeHtml($_item->getDescription()) ?>
+<?php endif; ?>

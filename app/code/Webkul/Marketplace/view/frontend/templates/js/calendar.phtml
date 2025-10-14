@@ -1,0 +1,26 @@
+<?php
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_Marketplace
+ * @author    Webkul Software Private Limited
+ * @copyright Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+?>
+<div id="wkcalendar-component" >
+    <script type="text/x-magento-init">
+    {
+        "#wkcalendar-component": {
+            "Webkul_Marketplace/js/calendar-widget": {
+                "dayNames": <?= /* @noEscape */ $days['wide'] ?>,
+                "dayNamesMin": <?= /* @noEscape */ $days['abbreviated'] ?>,
+                "monthNames": <?= /* @noEscape */ $months['wide'] ?>,
+                "monthNamesShort": <?= /* @noEscape */ $months['abbreviated'] ?>,
+                "enUS": <?= /* @noEscape */ $enUS ?>
+            }
+        }
+    }
+    </script>
+</div>

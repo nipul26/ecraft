@@ -1,0 +1,46 @@
+<?php
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_Marketplace
+ * @author    Webkul Software Private Limited
+ * @copyright Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+$partner=$block->getProfileDetail();
+if ($partner['shop_url']) {?>
+    <?php if ($detailedInfoGroup = $block->getGroupChildNames('microsite_details', 'getChildHtml')):?>
+        <div class="product info detailed wk-supplier-tabs">
+            <?php $layout = $block->getLayout(); ?>
+            <div class="product data items" data-mage-init='{"tabs":{"openedState":"active"}}'>
+                <?php
+                foreach ($detailedInfoGroup as $name):?>
+                    <?php
+                        $html = $layout->renderElement($name);
+                    
+                        $alias = $layout->getElementAlias($name);
+                        $label = $block->getChildData($alias, 'title');
+                    ?>
+                    <div class="data item title"
+                        aria-labeledby="tab-label-<?= $escaper->escapeHtml($alias) ?>-title"
+                        data-role="collapsible" id="tab-label-<?= $escaper->escapeHtml($alias) ?>">
+                       
+                        <a class="data switch"
+                        tabindex="-1"
+                        data-toggle="switch"
+                        href="#<?= $escaper->escapeHtml($alias) ?>"
+                        id="tab-label-<?= $escaper->escapeHtml($alias) ?>-title">
+                            <?= $escaper->escapeHtml($label) ?>
+                        </a>
+                        
+                    </div>
+                    <div class="data item content wk-display-none" id="<?= $escaper->escapeHtml($alias) ?>"
+                     data-role="content">
+                        <?= /* @noEscape */ $html ?>
+                    </div>
+                <?php endforeach;?>
+            </div>
+        </div>
+    <?php endif?>
+<?php }?>

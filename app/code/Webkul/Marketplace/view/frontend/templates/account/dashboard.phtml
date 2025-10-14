@@ -1,0 +1,236 @@
+<?php
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_Marketplace
+ * @author    Webkul Software Private Limited
+ * @copyright Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+$viewModel = $block->getViewModel();
+$helper = $viewModel->getHelper();
+$customers = $block->getTopCustomer();
+$topSaleProducts = $block->getTopSaleProducts();
+$categories = $block->getTopSaleCategories();
+$captchaEnableStatus = $helper->getCaptchaEnable();
+$filterOptions = $helper->arrayToJson($block->getFilterOptions());
+?>
+<button class="ask-que-to-admin ask-que-to-admin-style">
+    <?= $escaper->escapeHtml(__('Ask Question to Admin')) ?>
+</button>
+<div class="wk-dashboard-container">
+    <div class="product data items"
+     data-mage-init='{
+        "mage/tabs": {
+            "openedState": "active",
+            "animate": {"duration": 100},
+            "active": 0, "disabled": [],
+            "disabledState": "disabled"
+        }}'>
+        <div class="item title" data-role="collapsible">
+            <a class="switch" data-toggle="trigger" href="#tab-report">
+                <?= $escaper->escapeHtml(__('Reports')) ?>
+            </a>
+        </div>
+        <div id="tab-report" class="item content padding-unset border-unset" data-role="content">
+            <div id="dashboard-stat" data-bind="scope:'dashboard'">
+                <!-- ko template: getTemplate() --><!-- /ko -->
+                <script type="text/x-magento-init">
+                {
+                    "#dashboard-stat": {
+                        "Magento_Ui/js/core/app": {
+                        "components": {
+                                "dashboard": {
+                                    "component": "Webkul_Marketplace/js/dashboard-stat",
+                                    "loading": "<?= $escaper->escapeHtml(__('Loading ...')) ?>",
+                                    "statUrl": "<?= $escaper->escapeUrl(
+                                        $block->getUrl("marketplace/account/dashboardstats")
+                                    ) ?>",
+                                    "transactionUrl": "<?= $escaper->escapeUrl(
+                                        $block->getUrl("marketplace/transaction/history")
+                                    ) ?>",
+                                    "orderUrl": "<?= $escaper->escapeUrl(
+                                        $block->getUrl("marketplace/order/history")
+                                    ) ?>",
+                                    "askQueToAdmin":".ask-que-to-admin",
+                                    "askQueToAdminText" : "<?= $escaper->escapeHtml(__('Ask Question to Admin')) ?>",
+                                    "askQueToAdminSubmit" : ".ask-que-to-admin-submit",
+                                    "askQueToAdminForm" : "#ask-que-admin-form",
+                                    "askQueToAdminUrl" : "<?= $escaper->escapeUrl(
+                                        $block->getUrl(
+                                            "marketplace/account/askquestion",
+                                            ["_secure" => $block->getRequest()->isSecure()]
+                                        )
+                                    ) ?>",
+                                    "askQueAdminContent" : ".ask-que-admin-content",
+                                    "filterOptions": <?= /* @noEscape */ $filterOptions?>
+                                }
+                            }
+                        }
+                    }
+                }
+                </script>
+            </div>
+        </div>
+        <div class="item title" data-role="collapsible">
+            <a class="switch" data-toggle="trigger" href="#tab-activities">
+                <?= $escaper->escapeHtml(__('Activities')) ?>
+            </a>
+        </div>
+        <div id="tab-activities" class="item content padding-unset border-unset" data-role="content">
+            <div class="wk-tab-content">
+                <?= $block->getChildHtml("mp_latest_order"); ?>
+                <?= $block->getChildHtml("marketplace_dashboard_notification_list"); ?>
+                <?= $block->getChildHtml("mp_rating"); ?>
+                <div class="wk-latest-comment">
+                    <div class="wk-dashboard-block wk-border">
+                        <div class="wk-latest-comment-head">
+                            <div class="wk-heading">
+                                <?= $escaper->escapeHtml(__('Latest Comments and Reviews')) ?>
+                            </div>
+                            <div>
+                                <a href="<?= $escaper->escapeUrl($block->getUrl("marketplace/account/review"))?>">
+                                    <?= $escaper->escapeHtml(__('View All Reviews')) ?>
+                                </a>
+                            </div>
+                        </div>
+                        <?= $block->getChildHtml("mp_customer_review"); ?> 
+                    </div>
+                </div>
+            </div>
+        </div>        
+    </div>
+</div>
+<div class="ask-que-admin-content">
+    <form id="ask-que-admin-form" method="post" action="#" class="fieldset" 
+        data-role="ask-form" data-mage-init='{"validation":{}}'>
+        <div class="modal-body form-list field required">
+            <label class="label"><?= $escaper->escapeHtml(__('Subject')) ?> :</label>
+            <input type="text" name="subject" 
+            class="wk-contact_input_fields required-entry"/>
+            <label class="label"><?= $escaper->escapeHtml(__('Your Query')) ?> :</label>
+            <textarea  name="ask" 
+            class="queryquestion wk-contact_input_fields required-entry" 
+            style="width:100%;"></textarea>
+            <input type="hidden" name="seller-id"
+            value="<?= $escaper->escapeHtml($block->getCustomerId());?>"/>
+            <?php
+            if ($captchaEnableStatus) {?>
+                <div>
+                    <span>
+                        <label for="wk-mp-captcha"><span id="wk-mp-captchalable1">
+                            <?= $escaper->escapeHtml(rand(1, 20))?></span> + <span 
+                            id="wk-mp-captchalable2"><?= $escaper->escapeHtml(rand(1, 20))?>
+                        </span> =</label>
+                    </span>
+                    <input type="text" class="wk-contact_input_fields" 
+                    name="wk-mp-captcha" id="wk-mp-captcha" />
+                </div>
+                <?php
+            }?>
+        </div>
+        <div class="modal-footer">
+            <span class="error"></span>
+            <span class="errormail"></span>
+            <input type="reset" value="<?= $escaper->escapeHtml(__('Reset')) ?>"
+                id="resetbtn" class="wk-btn wk-btn_default"/>
+            <input type="button" value="<?= $escaper->escapeHtml(__('Submit')) ?>"
+                id="askbtn" class="wk-btn wk-btn-primary ask-que-to-admin-submit"/>
+        </div>
+    </form>
+</div>
+<script id="wk-top-customer-template" type="text/x-magento-template">
+    <% if(data.topCustomer.length <= 0) {%>
+        <div class="wk-activity">
+            <div class="wk-heading">
+                <?= $escaper->escapeHtml(__("No Customer found")); ?>
+            </div>
+        </div>
+    <% } else {  var i = 0, custLength = Object.keys(data.topCustomer).length; %>
+        <% _.each(data.topCustomer, function(value, key) { %>
+            <div class="wk-category-block">
+                <div class="wk-category-circle ">
+                    <%- value.name.charAt(0).toUpperCase() %>
+                </div>
+                <div class="wk-info-content small-gap">
+                    <div class="wk-info-heading">
+                        <%- value.name %>
+                    </div>
+                    <div class="wk-customer-identity">
+                        <%- value.email+ ' | M.: '+value.billing_telephone  %>
+                    </div>
+                    <div class="wk-category-label">
+                        <%- value.order_count.toString() +
+                        ' <?= $escaper->escapeHtml(__('Orders')) ?> | '+
+                         value.customer_base_total +
+                         ' <?= $escaper->escapeHtml(__('Purchasing')) ?> '
+                         %>
+                    </div>
+                </div>
+            </div>
+            <%
+            if(i < custLength-1) { %>
+                <hr class="border-bottom">
+            <% } i++; %>
+        <% }); %>
+    <% } %>
+</script>
+<script id="wk-top-product-template" type="text/x-magento-template">
+    <% if(data.topProduct.length <= 0) {%>
+        <div class="wk-activity">
+            <div class="wk-heading">
+                <?= $escaper->escapeHtml(__("No product found")); ?>
+            </div>
+        </div>
+    <% } else { var i = 0, prodLength = Object.keys(data.topProduct).length; %>
+        <% _.each(data.topProduct, function(value, key) { %>
+            <div class="wk-top-product-block">
+                <img class="wk-order-img" src="<%- value.image %>"
+                    alt="<%- value.name %>">
+                <div class="wk-info-content">
+                    <div class="wk-info-heading">
+                        <%- value.qty %>
+                        <?= $escaper->escapeHtml(__("Sales")) ?>
+                    </div>
+                    <div class="wk-heading">
+                        <%- value.name %>
+                    </div>
+                </div>
+            </div>
+            <%
+            if(i < prodLength-1) { %>
+                <hr class="border-bottom">
+            <% } i++; %>
+        <% }); %>
+    <% } %>
+</script>
+<script id="wk-top-category-template" type="text/x-magento-template">
+    <% if(data.topCategory.length <= 0) {%>
+        <div class="wk-activity">
+            <div class="wk-heading">
+                <?= $escaper->escapeHtml(__("No Category found")); ?>
+            </div>
+        </div>
+    <% } else { var i = 0, catLength = Object.keys(data.topCategory).length; %>
+        <% _.each(data.topCategory, function(value, key) { %>
+            <div class="wk-category-block">
+                <div class="wk-category-circle ">
+                    <%- value.category.charAt(0).toUpperCase() %>
+                </div>
+                <div class="wk-info-content small-gap">
+                    <div class="wk-info-heading">
+                        <%- value.percentage %><?= $escaper->escapeHtml("% ".__("Sale")) ?>
+                    </div>
+                    <div class="wk-category-label">
+                        <%- value.category %>
+                    </div>
+                </div>
+            </div>
+            <%
+            if(i < catLength-1) { %>
+                <hr class="border-bottom">
+            <% } i++; %>
+        <% }); %>
+    <% } %>
+</script>

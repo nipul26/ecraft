@@ -1,0 +1,67 @@
+<?php
+/**
+ * Webkul Software.
+ *
+ * @category   Webkul
+ * @package    Webkul_Marketplace
+ * @author     Webkul Software Private Limited
+ * @copyright  Webkul Software Private Limited (https://webkul.com)
+ * @license    https://store.webkul.com/license.html
+ */
+
+?>
+<div
+    class="fieldset">
+    <div class="admin__fieldset-wrapper-content">
+        <fieldset class="admin__fieldset" id="wk_sellerassign_category_form">
+            <div class="field">
+            <?php $_divId = "tree-div_" . time() ?>
+            <div id="<?= $escaper->escapeHtml($_divId) ?>" class="tree"></div>
+            <input type="hidden" name="seller_category_ids" id="category_id" 
+            data-form-part="customer_form" value="<?= $escaper->escapeHtml($block->getCatIds())?>"/>
+            <?php $scriptString = <<<script
+            
+            require([
+                'Webkul_Marketplace/js/UpdateElement',
+                'prototype'
+            ], function(AssignSellerCategoryForm){
+            
+            script;
+            $scriptString .= 'window.wk_sellerassign_category_form' .' = new AssignSellerCategoryForm(\'' .
+                /* @noEscape */ '.wk_sellerassign_category_form' . '\');';
+            $scriptString .= '});' . PHP_EOL;
+            ?>
+            <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
+
+            <script type="text/x-magento-init">
+                {
+                    "*": {
+                        "categoryCheckboxTreeData": {
+                            "dataUrl":       "<?= $escaper->escapeUrl($block->getLoadTreeUrl()) ?>",
+                            "divId":         "<?= $escaper->escapeHtml($_divId) ?>",
+                            "rootVisible":   false,
+                            "useAjax":       <?= $escaper->escapeHtml($block->getUseAjax()) ?>,
+                            "currentNodeId": <?= (int)$block->getCategoryId() ?>,
+                            "jsFormObject":  "<?= 'wk_sellerassign_category_form' ?>",
+                            "name":          "<?= $escaper->escapeHtml($block->getRoot()->getName()) ?>",
+                            "checked":       "<?= $escaper->escapeHtml(
+                                $block->getRoot()->getChecked()
+                            ) ?>",
+                            "allowdDrop":    <?= (int)$block->getRoot()->getIsVisible()
+                            ? 'true' : 'false' ?>,
+                            "rootId":        <?= (int)$block->getRoot()->getId() ?>,
+                            "expanded":      true,
+                            "categoryId":    <?= (int)$block->getCategoryId() ?>,
+                            "treeJson":      <?= /* @noEscape */ $block->getTreeJson() ?>
+                        }
+                    }
+                }
+            </script>
+            <script>
+                 require('mage/apply/main').apply();
+            </script>
+        </fieldset>
+    </div>
+</div>
+
+

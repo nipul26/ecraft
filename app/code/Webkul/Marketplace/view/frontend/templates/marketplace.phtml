@@ -1,0 +1,21 @@
+<?php
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_Marketplace
+ * @author    Webkul Software Private Limited
+ * @copyright Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+$viewModel = $block->getViewModel();
+$helper = $viewModel->getHelper();
+$pageLayout  =    $helper->getPageLayout();
+if ($pageLayout == 1) {
+    ?>
+    <?= $block->getChildHtml('landingPagelayout1'); ?>
+<?php } elseif ($pageLayout == 2) { ?>
+    <?=  $block->getChildHtml('landingPagelayout2'); ?>
+<?php } else { ?>
+    <?=  $block->getChildHtml('landingPagelayout3'); ?>
+<?php } ?>

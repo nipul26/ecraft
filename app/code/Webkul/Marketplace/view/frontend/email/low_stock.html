@@ -1,0 +1,61 @@
+<!--
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_Marketplace
+ * @author    Webkul Software Private Limited
+ * @copyright Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+-->
+<!--@vars {
+"var this.getUrl($store,'marketplace/product/productlist/',[_nosid:1]) |raw":"Customer Account URL",
+"var orderProductInfo |raw":"Product Info",
+"var sellerName":"Seller Name",
+"var productName|html":"productName",
+"var sku":"sku",
+"var qty":"qty"
+} @-->
+<!--@subject {{trans "Low Stock Notification Mail to Seller"}} {{var sellerName}}  @-->
+
+{{template config_path="design/email/header_template"}}
+
+<table>
+    <tr class="email-intro">
+        <td>
+            <p class="greeting">{{trans "%sellerName," sellerName=$sellerName}}</p>
+            <p>
+                {{trans "I would like to inform you that your product is in low stock."}}
+                {{trans 'You can increase the product stock by <a href="%account_url">logging into your account</a>.' account_url=$this.getUrl($store,'marketplace/product/productlist/',[_nosid:1]) |raw}}
+            </p>
+        </td>
+    </tr>
+    <tr class="email-summary">
+        <td>
+            <h2>{{trans "Your Product Information-"}}</h2>
+        </td>
+    </tr>
+    <tr class="email-information">
+        <td>
+            <table class="email-items">
+                <thead>
+                    <tr>
+                        <th class="item-info">{{trans "Product Name"}}</th>
+                        <th class="item-info">{{trans "Sku"}}</th>
+                        <th class="item-qty">{{trans "Stock Quantity"}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class='item-info'>{{var productName|html}}</td>
+                        <td class='item-info'>{{var sku}}</td>
+                        <td class='item-qty'>{{var qty}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+</table>
+
+{{template config_path="design/email/footer_template"}}

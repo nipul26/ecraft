@@ -1,0 +1,89 @@
+<?php
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_Marketplace
+ * @author    Webkul Software Private Limited
+ * @copyright Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+$orderId = $block->getRequest()->getParam('id');
+$order = $block->getOrderById($orderId);
+$viewModel = $block->getViewModel();
+$helper = $viewModel->getHelper();
+$mpOrder = $block->getSellerOrderInfo($orderId);
+$orderStatusLabel = $block->getOrderStatusLabel($mpOrder->getFirstItem()->getOrderStatus());
+?>
+<section class="wk-mp-order-view-account-information">
+    <div class="page-title-wrapper">
+        <h1 class="page-title">
+            <span data-ui-id="page-title-wrapper" class="base">
+                <?= $escaper->escapeHtml(__('Order #%1', $order->getRealOrderId())) ?>
+            </span>
+        </h1>
+        <span class="order-status"><?= $escaper->escapeHtml($orderStatusLabel)?></span>
+        <div class="order-date">
+        <span class="label"><?= $escaper->escapeHtml(__("Order Date"))?>:</span>
+        <date>
+            <?= /* @noEscape */ $block
+            ->formatDate($order->getCreatedAt(), \IntlDateFormatter::MEDIUM, true, $block
+            ->getTimezoneForStore($order->getStore())) ?>
+        </date>
+        </div>
+    </div>
+    <?php if ($helper->getSellerProfileDisplayFlag()) { ?>
+        <div class="block block-order-details-view">
+            <div class="block-title">
+                <strong><?= $escaper->escapeHtml(__('Buyer Information')) ?></strong>
+            </div>
+            <div class="block-content">
+                <div class="box-content">
+                    <div class="box">
+                        <div class="wk-row">
+                            <span class="label"><?= $escaper->escapeHtml(__('Customer Name'))?> : </span>
+                            <span class="value">
+                                <?= $escaper->escapeHtml($order->getCustomerName()); ?></span>
+                        </div>
+                        <div class="wk-row">
+                            <span class="label"><?= $escaper->escapeHtml(__('Email'))?> : </span>
+                            <span class="value">
+                                <?= $escaper->escapeHtml($order->getCustomerEmail()); ?></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php } ?>
+</section>
+
+<section class="wk-mp-order-addresses">
+    <div class="block block-order-details-view">
+        <div class="block-title">
+            <strong><?= $escaper->escapeHtml(__('Order Information')) ?></strong>
+        </div>
+        <div class="block-content">
+            <?php if ($helper->getSellerProfileDisplayFlag()) { ?>
+                <?php if ($block->isOrderCanShip($order)): ?>
+                    <div class="box box-order-shipping-address">
+                        <strong class="box-title"><span>
+                            <?= $escaper->escapeHtml(__('Shipping Address')) ?></span></strong>
+                        <div class="box-content">
+                            <address><?= /* @noEscape */ $block->getFormattedAddress($order
+                            ->getShippingAddress()); ?></address>
+                        </div>
+                    </div>
+                <?php endif; ?>
+                <div class="box box-order-billing-address">
+                    <strong class="box-title">
+                        <span><?= $escaper->escapeHtml(__('Billing Address')) ?></span>
+                    </strong>
+                    <div class="box-content">
+                        <address><?= /* @noEscape */ $block->getFormattedAddress($order
+                        ->getBillingAddress()); ?></address>
+                    </div>
+                </div>
+            <?php } ?>
+        </div>
+    </div>
+</section>

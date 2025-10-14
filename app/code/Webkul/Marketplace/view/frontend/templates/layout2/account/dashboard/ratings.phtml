@@ -1,0 +1,52 @@
+<?php
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_Marketplace
+ * @author    Webkul Software Private Limited
+ * @copyright Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+$priceRating = $block->getSellerStatisticsGraphUrl('feed_price');
+$valueRating = $block->getSellerStatisticsGraphUrl('feed_value');
+$qualityRating = $block->getSellerStatisticsGraphUrl('feed_quality');
+?>
+<div class="wk-rating-main-block">
+   <div class="wk-dashboard-block wk-border">
+      <div class="wk-info-heading">
+         <?= $escaper->escapeHtml(__('Price Rating')) ?>
+      </div>
+      <?php foreach ($priceRating as $key => $rating) {
+               $block->getChildBlock("mp_rating_item")->setData("rating", $rating)->setData("star", $key);
+            ?>
+            <?= $block->getChildHtml('mp_rating_item', false); ?>
+            <?php
+      }
+        ?>
+   </div>
+   <div class="wk-dashboard-block wk-border">
+      <div class="wk-info-heading">
+         <?= $escaper->escapeHtml(__('Value Rating')) ?>
+      </div>
+      <?php foreach ($valueRating as $key => $rating) {
+               $block->getChildBlock("mp_rating_item")->setData("rating", $rating)->setData("star", $key);
+            ?>
+            <?= $block->getChildHtml('mp_rating_item', false); ?>
+            <?php
+      }
+        ?>
+   </div>
+   <div class="wk-dashboard-block wk-border">
+      <div class="wk-info-heading">
+         <?= $escaper->escapeHtml(__('Quality Rating')) ?>
+      </div>
+      <?php foreach ($qualityRating as $key => $rating) {
+               $block->getChildBlock("mp_rating_item")->setData("rating", $rating)->setData("star", $key);
+            ?>
+            <?= $block->getChildHtml('mp_rating_item', false); ?>
+            <?php
+      }
+        ?>
+   </div>
+</div>

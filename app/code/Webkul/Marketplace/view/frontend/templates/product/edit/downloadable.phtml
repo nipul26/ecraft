@@ -1,0 +1,93 @@
+<?php
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_Marketplace
+ * @author    Webkul Software Private Limited
+ * @copyright Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+/**
+ * @var $block \Webkul\Marketplace\Controller\Product\Edit\Tab\Downloadable
+ */
+use Webkul\Marketplace\Model\Product;
+
+$viewModel = $block->getViewModel();
+$helper = $viewModel->getHelper();
+$productType = $block->getRequest()->getParam('type');
+if ($block->getSellerProduct()->getId()) {
+    $productType = $block->getSellerProduct()->getTypeId();
+}
+$allowedtypes = explode(',', $helper->getAllowedProductType());
+$applicableProductType = [
+    Product::PRODUCT_TYPE_SIMPLE,
+    Product::PRODUCT_TYPE_DOWNLOADABLE,
+    Product::PRODUCT_TYPE_VIRTUAL
+];
+if (in_array(Product::PRODUCT_TYPE_DOWNLOADABLE, $allowedtypes) && in_array($productType, $applicableProductType)) {
+    ?>
+    <script type="text/x-magento-init">
+        {
+            "*": {
+                "wkDownloadable": {}
+            }
+        }
+    </script>
+    <div id="downloadable_items-wrapper" data-tab="downloadable_items"
+     class="field" data-collapsible="true" role="tablist">
+        <label class="label"><?= $escaper->escapeHtml(__('Downloadable Information')) ?>:</label>
+        <div id="downloadable_items-content" data-role="content" class="fieldset-wrapper-content"
+         role="tabpanel" aria-hidden="false" style="display: block;">
+            <div data-tab-type="tab_content_downloadableInfo" id="downloadable_items_content" 
+            data-ui-id="downloadable-items-tab-content-downloadable-items">
+                <div id="alert_messages_block"><?= $block->getMessageHtml() ?></div>
+                <div class="field field-option field-is-downloaodable">
+                    <input type="checkbox" data-action="change-type-product-downloadable"  class="control-checkbox"
+                           name="is_downloadable" id="is-downloaodable" checked="checked" />
+                    <label class="field-label" for="is-downloaodable">
+                        <span><?= $escaper->escapeHtml(__('Is this downloadable Product?')); ?></span>
+                    </label>
+                </div>
+                <div class="entry-edit" id="product_info_tabs_downloadable_items">
+                    <?= $block->getChildHtml() ?>
+                </div>
+                <div style="display:none">
+                    <div id="custom-advice-container"></div>
+                </div>
+            </div>
+            <script type="text/x-magento-init">
+                {
+                    "*": {
+                        "Webkul_Marketplace/downloadable-type-handler": {
+                            "isDownloadable": "true",
+                            "tabId": "downloadable_items"
+                        }
+                    }
+                }
+            </script>
+            <script>
+                /**
+                 * @todo get rid of this after automatic binding of 
+                 * js that comes from config for UI component will be implemented
+                 */
+                require([
+                    'jquery',
+                    'Webkul_Marketplace/catalog/type-events',
+                    'Webkul_Marketplace/downloadable-type-handler',
+                    'Magento_Ui/js/lib/view/utils/async'
+                ], function ($, typeProducts) {
+
+                    $('body').trigger('changeTypeProduct');
+                    $('body').trigger('contentUpdated');
+                    $.async('[name=type]', function() {
+                        typeProducts.init();
+                    });
+
+                });
+            </script>
+
+        </div>
+    </div>
+    <?php
+}?>

@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_Marketplace
+ * @author    Webkul Software Private Limited
+ * @copyright Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="customer_account"/>
+    <update handle="marketplace_styles"/>
+    <body>
+        <referenceBlock name="page.main.title">
+            <action method="setPageTitle">
+                <argument translate="true" name="title" xsi:type="string">Marketplace Dashboard</argument>
+            </action>
+        </referenceBlock>
+        <referenceContainer name="content">
+            <block class="Webkul\Marketplace\Block\Account\Dashboard" name="marketplace_account_dashboard" template="Webkul_Marketplace::account/dashboard.phtml" cacheable="false" before="-" >
+                <block class="Webkul\Marketplace\Block\Page\Notifications" name="marketplace_dashboard_notification_list" template="Webkul_Marketplace::layout2/account/dashboard/notifications.phtml" cacheable="false"/>
+                <block class="Webkul\Marketplace\Block\Account\Dashboard" name="mp_customer_review" template="Webkul_Marketplace::layout2/account/dashboard/review.phtml" cacheable="false"/>
+                <block class="Webkul\Marketplace\Block\Account\Dashboard\ReviewChart" name="mp_rating" template="Webkul_Marketplace::layout2/account/dashboard/ratings.phtml" cacheable="false">
+                    <block class="Webkul\Marketplace\Block\Account\Dashboard\ReviewChart" name="mp_rating_item" template="Webkul_Marketplace::layout2/account/dashboard/rating_item.phtml" cacheable="false"/>
+                </block>
+                <block class="Webkul\Marketplace\Block\Order\OrderListCard" name="mp_latest_order" template="Webkul_Marketplace::account/latest_order.phtml" cacheable="false"/>
+            </block>
+        </referenceContainer>
+        <referenceBlock name="marketplace_account_dashboard">
+            <arguments>
+                <argument name="view_model" xsi:type="object">Webkul\Marketplace\ViewModel\HelperViewModel</argument>
+            </arguments>
+        </referenceBlock>
+    </body>
+</page>

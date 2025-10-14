@@ -1,0 +1,32 @@
+<?php
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_Marketplace
+ * @author    Webkul Software Private Limited
+ * @copyright Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+$active = "active";
+$type = $block->getRequest()->getParam("type", 0);
+$allStatus = $block->getAllOrderFilter();
+?>
+<div class="wk-card">
+   <?php
+    foreach ($allStatus as $key => $status) {
+            $orderData = $block->getOrderData($key);
+        ?>
+          <a href="<?= $escaper->escapeUrl($orderData["url"]) ?>"
+               class="<?= $escaper->escapeHtml($orderData["active"]);?>">
+            <div class="wk-product-count">
+               <?= $escaper->escapeHtml($orderData["count"]);?>
+            </div>
+            <div>
+               <?= $escaper->escapeHtml($orderData["label"]);?>
+            </div>
+         </a>
+        <?php
+    }
+    ?>
+</div>

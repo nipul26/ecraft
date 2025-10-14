@@ -1,0 +1,158 @@
+<?php
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_Marketplace
+ * @author    Webkul Software Private Limited
+ * @copyright Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+$viewModel = $block->getViewModel();
+$helper = $viewModel->getHelper();
+$bannerDisplay      =   $helper->getDisplayBannerLayout3();
+$bannerImage        =   $helper->getBannerImageLayout3();
+$bannerContent      =   $helper->getBannerContentLayout3();
+$marketplacebutton  =   $helper->getBannerButtonLayout3();
+$marketplacelabel1  =   $helper->getMarketplacelabel1Layout3();
+$marketplacelabel2  =   $helper->getMarketplacelabel2Layout3();
+$marketplacelabel3  =   $helper->getMarketplacelabel3Layout3();
+$iconsDisplay       =   $helper->getDisplayIconLayout3();
+$iconImage1         =   $helper->getIconImage1Layout3();
+$iconImage1Label    =   $helper->getIconImageLabel1Layout3();
+$iconImage2         =   $helper->getIconImage2Layout3();
+$iconImage2Label    =   $helper->getIconImageLabel2Layout3();
+$iconImage3         =   $helper->getIconImage3Layout3();
+$iconImage3Label    =   $helper->getIconImageLabel3Layout3();
+$iconImage4         =   $helper->getIconImage4Layout3();
+$iconImage4Label    =   $helper->getIconImageLabel4Layout3();
+$iconImage5         =   $helper->getIconImage5Layout3();
+$iconImage5Label    =   $helper->getIconImageLabel5Layout3();
+$iconSeperatorImage = $block->
+getViewFileUrl('Webkul_Marketplace::images/landingpage2/icon/sell-page-2-arrow-right.png');
+?>
+<link rel="stylesheet" type="text/css"
+href="<?=
+        $escaper->escapeUrl(
+            $block->getViewFileUrl('Webkul_Marketplace::css/landingpage_two.css')
+        );?>">
+<div class="wk-mp-design wk-mp-landingpage wk-mp-landingpage-layout3">
+    <?php
+    $sellerAccountUrl = $block->getUrl(
+        'marketplace/account/becomeseller',
+        ["_secure" => $block->getRequest()->isSecure()]
+    );
+    ?>
+    <div class="wk-mp-banner-container-layout2">
+        <div class="wk-mp-banner">
+            <?php if ($bannerDisplay) { ?>
+            <div class="wk-list-container wk-mp-header">
+                <div class="wk-mp-header-container">
+                    <?= /* @noEscape */  $block->getCmsFilterContent($bannerContent)?>
+                </div>
+            </div>
+                <?php
+            } ?>
+            <?php if (!$helper->isCustomerLoggedIn()): ?>
+                <?php $sellerAccountUrl = '#register-as-seller';?>
+                <div class="wk-list-container">
+                    <div class="wk-list-container-registration wk-text-transform-left"
+                     id="register-as-seller">
+                        <div class="wk-list-container-feature-label">
+                            <?= $escaper->escapeHtml(__('Register As Seller'))?>
+                        </div>
+                        <?= $block->getChildHtml('customer_form_register_layout3');?>
+                    </div>
+                </div>
+        <?php endif; ?>
+        </div>
+    </div>
+    <h1 class="wk-marketplace-label"><?= $escaper->escapeHtml($marketplacelabel1)?></h1>
+    <?php
+    if ($iconsDisplay) {?>
+        <div class="wk-mp-icon-container">
+            <div class="wk-mp-icon-wraper">
+                <div class="wk-mp-icon">
+                    <img src="<?= $escaper->escapeUrl($iconImage1) ?>">
+                </div>
+                <span class="wk-marketplace-label-span"><?= $escaper->escapeHtml($iconImage1Label) ?></span>
+            </div>
+            <div class="wk-mp-icon-seperator">
+                <div class="wk-mp-icon">
+                    <img src="<?= $escaper->escapeUrl($iconSeperatorImage) ?>">
+                </div>
+            </div>
+            <div class="wk-mp-icon-wraper">
+                <div class="wk-mp-icon">
+                    <img src="<?= $escaper->escapeUrl($iconImage2) ?>">
+                </div>
+                <span class="wk-marketplace-label-span"><?= $escaper->escapeHtml($iconImage2Label) ?></span>
+            </div>
+            <div class="wk-mp-icon-seperator">
+                <div class="wk-mp-icon">
+                    <img src="<?= $escaper->escapeUrl($iconSeperatorImage) ?>">
+                </div>
+            </div>
+            <div class="wk-mp-icon-wraper">
+                <div class="wk-mp-icon">
+                    <img src="<?= $escaper->escapeUrl($iconImage3) ?>">
+                </div>
+                <span class="wk-marketplace-label-span"><?= $escaper->escapeHtml($iconImage3Label) ?></span>
+            </div>
+            <div class="wk-mp-icon-seperator">
+                <div class="wk-mp-icon">
+                    <img src="<?= $escaper->escapeUrl($iconSeperatorImage) ?>">
+                </div>
+            </div>
+            <div class="wk-mp-icon-wraper">
+                <div class="wk-mp-icon">
+                    <img src="<?= $escaper->escapeUrl($iconImage4) ?>">
+                </div>
+                <span class="wk-marketplace-label-span"><?= $escaper->escapeHtml($iconImage4Label) ?></span>
+            </div>
+            <div class="wk-mp-icon-seperator">
+                <div class="wk-mp-icon">
+                    <img src="<?= $escaper->escapeUrl($iconSeperatorImage) ?>">
+                </div>
+            </div>
+            <div class="wk-mp-icon-wraper">
+                <div class="wk-mp-icon">
+                    <img src="<?= $escaper->escapeUrl($iconImage5) ?>">
+                </div>
+                <span class="wk-marketplace-label-span"><?= $escaper->escapeHtml($iconImage5Label) ?></span>
+            </div>
+        </div>
+        <?php
+    } ?>
+    <h1 class="wk-marketplace-label"><?= $escaper->escapeHtml($marketplacelabel2) ?></h1>
+    <?= $block->getLayout()
+          ->createBlock(Magento\Cms\Block\Block::class)
+          ->setBlockId('marketplace_layout3')
+          ->toHtml();?>
+    <div class="wk-list-container-wrapper wk-text-transform-center">
+        <span class="wk-icon-check-span"><?= $escaper->escapeHtml($marketplacelabel3) ?></span>
+        <div class="primary">
+            <a href="<?= $escaper->escapeUrl($sellerAccountUrl)?>">
+                <button type="submit" class="action submit primary"
+                 title="<?= $escaper->escapeHtml($marketplacebutton); ?>">
+                    <span><?= $escaper->escapeHtml($marketplacebutton); ?></span>
+                </button>
+            </a>
+        </div>
+    </div>
+</div>
+<script>
+    require([
+        "jquery",
+        "mage/mage",
+    ], function($){
+        var bannerDisplay = '<?= /* @noEscape */ $bannerDisplay;?>';
+        $('.page-title-wrapper').hide();
+        // $('.wk-mp-landingpage').insertBefore('#maincontent');
+        if(bannerDisplay == 1) {
+          $('.wk-mp-banner').css('background-image','url("<?= $escaper->escapeUrl($bannerImage) ?>")');
+        } else {
+          $('.wk-list-container').css('float','right');
+        }
+    });
+</script>
