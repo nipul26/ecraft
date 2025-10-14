@@ -1,0 +1,87 @@
+<?php
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_Marketplace
+ * @author    Webkul Software Private Limited
+ * @copyright Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+?>
+<?php
+$viewModel = $block->getViewModel();
+$helper = $viewModel->getHelper();
+$laminasUri = $viewModel->getLaminasUriObj();
+$defaultCategoryId = $helper->getRootCategoryIdByStoreId();
+?>
+<?php $_filters = $block->getActiveFilters() ?>
+<?php if (!empty($_filters)): ?>
+<div class="filter-current" 
+data-mage-init='{"collapsible":{"openedState": "active", "collapsible": true, "active": false }}'>
+    <strong class="block-subtitle filter-current-subtitle"
+            role="heading"
+            aria-level="2"
+            data-role="title"
+            data-count="<?= $escaper->escapeHtml(count($_filters)) ?>">
+            <?= $escaper->escapeHtml(__('Now Shopping by')) ?></strong>
+    <ol class="items">
+        <?php foreach ($_filters as $_filter): ?>
+            <li class="item">
+                <span class="filter-label"><?= $escaper->escapeHtml(__($_filter->getName())) ?></span>
+                <span class="filter-value"><?= /* @noEscape */ $block->stripTags($_filter->getLabel()) ?></span>
+                <?php
+                $clearLinkUrl = $_filter->getClearLinkUrl();
+                $currentFilterName = $escaper->escapeHtml(__($_filter->getName())) . " " .
+                $block->stripTags($_filter->getLabel());
+                if ($clearLinkUrl):
+                    ?>
+                    <a class="action previous" href="<?= $escaper->escapeUrl($_filter->getRemoveUrl()) ?>"
+                       title="<?= $escaper->escapeHtml(__('Previous')) ?>">
+                        <span><?= $escaper->escapeHtml(__('Previous')) ?></span>
+                    </a>
+                    <a class="action remove"
+                       title="<?= $escaper->escapeHtml($_filter->getFilter()->getClearLinkText()) ?>"
+                       href="<?= $escaper->escapeUrl($clearLinkUrl) ?>">
+                        <span><?= $escaper->escapeHtml($_filter->getFilter()->getClearLinkText()) ?></span>
+                    </a>
+                <?php else: ?>
+                    <?php
+                    // update remove filter url for default category
+                    $removeUrl = $_filter->getRemoveUrl();
+                  
+                    $uri = $laminasUri->parse($_filter->getRemoveUrl());
+                
+                    $parsedUrl['scheme'] =  $uri->getScheme();
+                    $parsedUrl['host'] =  $uri->getHost();
+                    $parsedUrl['path'] =  $uri->getPath();
+                    $parsedUrl['query'] =  $uri->getQuery();
+    
+                    if (isset($parsedUrl['query'])) {
+                        $parsedQuery = $parsedUrl['query'];
+                        $uri = $laminasUri->setQuery($parsedQuery);
+                        $query = $uri->getQueryAsArray();
+                        
+                        if (isset($query['cat']) && $query['cat'] == $defaultCategoryId) {
+                            if (count($query)>1) {
+                                $parsedQuery = str_replace('cat='.$defaultCategoryId.'&', '', $parsedQuery);
+                                $parsedQuery = str_replace('amp;', '', $parsedQuery);
+                                $query = !empty($query) ? '?'. $parsedQuery : '';
+                            } else {
+                                $query = '';
+                            }
+                            $path = isset($parsedUrl['path']) ? $parsedUrl['path'] : '';
+                            $removeUrl = $parsedUrl['scheme']. '://'. $parsedUrl['host']. $path. $query;
+                        }
+                    }
+                    ?>
+                    <a class="action remove" href="<?= $escaper->escapeHtml($removeUrl) ?>"
+                       title="<?= $escaper->escapeHtml(__('Remove') . " " . $currentFilterName) ?>">
+                        <span><?= $escaper->escapeHtml(__('Remove This Item')) ?></span>
+                    </a>
+                <?php endif; ?>
+            </li>
+        <?php endforeach; ?>
+    </ol>
+</div>
+<?php endif; ?>

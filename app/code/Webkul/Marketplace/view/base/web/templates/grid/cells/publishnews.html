@@ -1,0 +1,37 @@
+<!--
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_Marketplace
+ * @author    Webkul Software Private Limited
+ * @copyright Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+-->
+<form id="ask-form-<%- entityId %>" method="get" enctype="multipart/form-data" action="<%- formaction %>" class="wk-mp-deny-form">
+    <div class="modal-body">
+        <div class="bootbox-body">
+            <input type="hidden" name="entityId" value="<%- entityId %>">
+        </div>
+    </div>
+    <div class="modal-footer">
+        <span class="error"></span>
+        <button type="submit" class="btn btn-primary"><span><%- submitlabel %></span></button>
+        <span class="clear"></span>
+    </div>
+</form>
+<script>
+    require([
+        "jquery",
+        "mage/mage"
+    ], function($){
+        $("body").delegate('.action-close',"click",function(){
+            if($(this).parents('.modals-wrapper').find('form').attr('class')=='wk-mp-deny-form'){
+                $(this).parents('.modals-wrapper').find('.modals-overlay').remove();
+                $(this).parents('.modal-popup').remove();
+                $('body').removeClass('_has-modal');
+            }
+        });
+    });
+</script>

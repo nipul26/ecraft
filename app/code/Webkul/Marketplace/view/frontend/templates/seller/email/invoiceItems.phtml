@@ -1,0 +1,61 @@
+<?php
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_Marketplace
+ * @author    Webkul Software Private Limited
+ * @copyright Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+$invoiceData = $block->getInvoiceData();
+?>
+<table class="email-items">
+    <thead>
+        <tr>
+            <th class="item-info"><?= $escaper->escapeHtml(__("Product Name"));?></th>
+            <th class="item-info"><?= $escaper->escapeHtml(__("Sku"));?></th>
+            <th class="item-qty"><?= $escaper->escapeHtml(__("Qty"));?></th>
+            <th class="item-price"><?= $escaper->escapeHtml(__("Price"));?></th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($invoiceData["items"] as $item) { ?>
+            <tr>
+                <td class='item-info'><?= /* @noEscape */ $item["productName"]; ?></td>
+                <td class='item-info'><?= $escaper->escapeHtml($item["sku"]); ?></td>
+                <td class='item-qty'><?= $escaper->escapeHtml($item["qty"]); ?></td>
+                <td class='item-price'>
+                    <span class="price">
+                        <?= $escaper->escapeHtml($item["price"]); ?>
+                    </span>
+                </td>
+            </tr>
+        <?php } ?>
+    </tbody>
+    <tfoot class='order-totals'>
+        <tr class='subtotal'>
+            <th colspan='3'><?= $escaper->escapeHtml(__('Shipping & Handling Charges'))?></th>
+            <td colspan='3'><span><?= $escaper->escapeHtml($invoiceData["shipping"])?></span></td>
+        </tr>
+        <tr class='subtotal'>
+            <th colspan='3'><?= $escaper->escapeHtml(__('Discount'))?></th>
+            <td colspan='3'><span> - <?= $escaper->escapeHtml($invoiceData["discount"])?></span></td>
+        </tr>
+        <tr class='subtotal'>
+            <th colspan='3'><?= $escaper->escapeHtml(__('Tax Amount'))?></th>
+            <td colspan='3'><span><?= $escaper->escapeHtml($invoiceData["taxAmount"])?></span></td>
+        </tr>
+        <?php if ($invoiceData["codChargeAmount"]) {?>
+        <tr class='subtotal'>
+            <th colspan='3'><?= $escaper->escapeHtml(__('Cash On Delivery Charges'))?></th>
+            <td colspan='3'><span><?= $escaper->escapeHtml($invoiceData["codChargeAmount"])?></span></td>
+        </tr>
+        <?php } ?>
+        <tr class='subtotal'>
+            <th colspan='3'><?= $escaper->escapeHtml(__('Grandtotal'))?></th>
+            <td colspan='3'><span><?= $escaper->escapeHtml($invoiceData["grandTotal"])?></span></td>
+        </tr>
+        
+    </tfoot>
+</table>

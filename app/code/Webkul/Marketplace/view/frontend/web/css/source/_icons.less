@@ -1,0 +1,73 @@
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_Marketplace
+ * @author    Webkul Software Private Limited
+ * @copyright Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+ @import '_variables.less';
+
+.wk-arrow-down,
+.wk-arrow-up {
+    box-sizing: border-box;
+    display: block;
+    display: inline-block;
+    padding-right: 12px;
+    position: relative;
+    transform: scale(var(--ggs,1));
+}
+.wk-arrow-down::after,
+.wk-arrow-down::before {
+    bottom: 4px;
+    box-sizing: border-box;
+    content: '';
+    display: block;
+    position: absolute;
+}
+.wk-arrow-down::after {
+    border-bottom: 2px solid;
+    border-left: 2px solid;
+    height: 8px;
+    right: 0;
+    transform: rotate(-45deg);
+    width: 8px;
+}
+.wk-arrow-down::before {
+    background: currentColor;
+    height: 16px;
+    right: 3px;
+    width: 2px;
+}
+.wk-arrow-up::after {
+    border-left: 2px solid;
+    border-top: 2px solid;
+    height: 8px;
+    right: -3px;
+    transform: rotate(45deg);
+    width: 8px;
+}
+.wk-arrow-up::before {
+    background: currentColor;
+    height: 16px;
+    right: 0;
+    width: 2px;
+}
+.wk-arrow-up::after,
+.wk-arrow-up::before {
+    box-sizing: border-box;
+    content: '';
+    display: block;
+    position: absolute;
+    top: 4px;
+}
+.wk-rating-icon-small:before {
+    color: @wk-rating-icon-color;
+    content: '\f005';
+    font-family: 'font-awesome';
+    font-size: 1.7rem;
+    font-weight: normal;
+    left: 0;
+    position: absolute;
+}

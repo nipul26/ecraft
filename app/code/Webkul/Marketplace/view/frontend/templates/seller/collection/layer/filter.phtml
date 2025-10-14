@@ -1,0 +1,49 @@
+<?php
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_Marketplace
+ * @author    Webkul Software Private Limited
+ * @copyright Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+?>
+<?php
+$viewModel = $block->getViewModel();
+?>
+<ol class="items">
+    <?php foreach ($filterItems as $filterItem): ?>
+        <li class="item">
+            <?php if ($filterItem->getCount() > 0): ?>
+                <a href="<?= $escaper->escapeUrl($filterItem->getUrl()) ?>">
+                    <?= /* @noEscape */ $filterItem->getLabel() ?>
+                    <?php if ($viewModel->getCatalogHelperData()->shouldDisplayProductCountOnLayer()): ?>
+                        <span class="count"><?= $escaper->escapeHtml($filterItem->getCount()) ?>
+                        <span class="filter-count-label">
+                            <?php if ($filterItem->getCount() == 1):?> 
+                                <?= /* @escapeNotVerified */ $escaper->escapeHtml(__('item')) ?>
+                                <?php else:?> 
+                                    <?= /* @escapeNotVerified */ $escaper->escapeHtml(__('items')) ?>
+                                <?php endif;?>
+                            </span>
+                        </span>
+                    <?php endif; ?>
+                </a>
+            <?php else:?>
+                <?= /* @noEscape */ $filterItem->getLabel() ?>
+                <?php if ($viewModel->getCatalogHelperData()->shouldDisplayProductCountOnLayer()): ?>
+                    <span class="count">
+                        <?= $escaper->escapeHtml($filterItem->getCount()) ?>
+                        <span class="filter-count-label">
+                        <?php if ($filterItem->getCount() == 1):?>
+                            <?= $escaper->escapeHtml(__('item')) ?>
+                        <?php else:?>
+                            <?= $escaper->escapeHtml(__('items')) ?>
+                        <?php endif;?>
+                    </span></span>
+                <?php endif; ?>
+            <?php endif; ?>
+        </li>
+    <?php endforeach ?>
+</ol>

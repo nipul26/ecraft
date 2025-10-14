@@ -1,0 +1,66 @@
+<!--
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_Marketplace
+ * @author    Webkul Software Private Limited
+ * @copyright Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+-->
+<!--@subject {{trans "Product Approved Notification"}}  @-->
+<!--@vars {
+"var productName|raw":"Product Name",
+"var productDescription|raw":"Product Description",
+"var price|raw":"Price",
+"var categoryName|raw":"Category",
+"var sellerName":"Seller Name"
+} @-->
+
+{{template config_path="design/email/header_template"}}
+
+<table>
+    <tr class="email-intro">
+        <td>
+            <p class="greeting">{{trans "%sellerName," sellerName=$sellerName}}</p>
+            <p>
+                {{trans "I would like to inform you that your product has been approved."}}
+            </p>
+        </td>
+    </tr>
+    <tr class="email-summary">
+        <td>
+        </td>
+    </tr>
+    <tr class="email-information">
+        <td>
+            <table class="product-name">
+                <tr>
+                    <td class="product-details" style="text-align:center">
+                        <h3>{{trans "Product Name"}}</h3>
+                        <p>{{var productName|raw}}</p>
+                    </td>
+                     <td class="product-details" style="text-align:center">
+                        <h3>{{trans "Category"}}</h3>
+                        <p>{{var categoryName|raw}}</p>
+                    </td>
+                </tr>
+            </table>
+            <table class="product-desc">
+                <tr>
+                    <td class="product-details" style="text-align:center">
+                        <h3>{{trans "Product Description"}}</h3>
+                        <p>{{var productDescription|raw}}</p>
+                    </td>
+                     <td class="product-details" style="text-align:center">
+                        <h3>{{trans "Price"}}</h3>
+                        <p>{{var price|raw}}</p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+{{template config_path="design/email/footer_template"}}

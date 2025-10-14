@@ -1,0 +1,68 @@
+<?php
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_Marketplace
+ * @author    Webkul Software Private Limited
+ * @copyright Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+$publishedNews = $block->getCollection();
+$index = 1;
+if (!$block->isPopupAvailable() || !$publishedNews->getSize()) {
+    return;
+}
+?>
+<div class="wk-news-popup-container">
+    <?php foreach ($publishedNews as $publNews) {
+        $dispNone = "";
+        if ($index > 3) {
+            $dispNone = "dispnone";
+        }
+        ?>
+    <div class="wk-news-popup <?= $escaper->escapeHtml($dispNone); ?>">
+        <div class="wk-news-header">
+            <img src="<?= $escaper->escapeHtmlAttr($block->getViewFileUrl('Webkul_Marketplace::images/info.png')); ?>">
+            <span class="wk-news-header-label">
+                <?= $escaper->escapeHtml(__("Attention - Admin News")); ?>
+            </span>
+            <button type="button" data-role="closeBtn" class="action-close wk-close">
+                <span>
+                    <?= $escaper->escapeHtml(__("Close")); ?>
+                </span>
+            </button>
+        </div>
+        <div class="wk-news-content">
+            <p>
+                <?= /* @noEscape*/ $publNews->getContent(); ?>
+            </p>
+        </div>
+        <div class="wk-news-footer">
+            <a href="<?= $escaper->escapeUrl($block->getUrl("marketplace/account/adminnews")); ?>" class="wk-all-news">
+                <?= $escaper->escapeHtml(__("View All News")) ?>
+            </a>
+            <button class="action tocart primary wk-mark-read-news"
+                data-id="<?= $escaper->escapeHtml($publNews->getEntityId()) ?>">
+                <?= $escaper->escapeHtml(__("OK")) ?>
+            </button>
+        </div>
+    </div>
+    <?php $index++; } ?>
+    <?php if ($block->getMoreNews()) { ?>
+        <div class="wk-more-news">
+            <div class="wk-more-news-link">
+                <a href="<?= $escaper->escapeUrl($block->getUrl("marketplace/account/adminnews")); ?>">
+                    <?= $escaper->escapeHtml(__("%1 More News", $block->getMoreNews())) ?>
+                </a>
+            </div>
+        </div>
+    <?php } ?>
+</div>
+<script type="text/x-magento-init">
+    {
+        ".wk-news-popup-container": {
+            "newsPopupWidget": {}
+        }
+    }
+</script>

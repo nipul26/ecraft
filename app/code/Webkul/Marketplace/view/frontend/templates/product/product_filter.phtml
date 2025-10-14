@@ -1,0 +1,95 @@
+<?php
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_Marketplace
+ * @author    Webkul Software Private Limited
+ * @copyright Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+use \Webkul\Marketplace\Model\Product;
+
+$active = "active";
+$type = $block->getRequest()->getParam("type", 0);
+$enable = Product::FILTER_ENABLE;
+$disable = Product::FILTER_DISABLE;
+$lowStock = Product::FILTER_LOW_STOCK;
+$outOfStock = Product::FILTER_OUT_OF_STOCK;
+$pending = Product::FILTER_PENDING;
+$deny = Product::FILTER_DENY;
+?>
+<div class="wk-card">
+   <?php
+      $url = $block->getUrl("marketplace/product/productlist/type/enable");
+      $active = ($type == $enable) ? "active" :"";
+    ?>
+   <a href="<?= $escaper->escapeUrl($url) ?>" class="<?= $escaper->escapeHtml($active);?>">
+      <div class="wk-product-count">
+         <?= $escaper->escapeHtml($block->getEnableProduct());?>
+      </div>
+      <div>
+         <?= $escaper->escapeHtml(__("Enabled Products"));?>
+      </div>
+   </a>
+   <?php
+      $url = $block->getUrl("marketplace/product/productlist/type/disable");
+      $active = $type == $disable? "active" :"";
+    ?>
+   <a href="<?= $escaper->escapeUrl($url) ?>" class="<?= $escaper->escapeHtml($active);?>">
+      <div class="wk-product-count">
+         <?= $escaper->escapeHtml($block->getDisableProduct());?>
+      </div>
+      <div>
+         <?= $escaper->escapeHtml(__("Disabled Products"));?>
+      </div>
+   </a>
+   <?php $url = $block->getUrl("marketplace/product/productlist/type/low_stock");
+         $active = $type == $lowStock ? "active" :"";
+    ?>
+   <a href="<?= $escaper->escapeUrl($url) ?>" class="<?= $escaper->escapeHtml($active);?>">
+      <div class="wk-product-count">
+         <?= $escaper->escapeHtml($block->getLowStockProduct());?>
+      </div>
+      <div>
+         <?= $escaper->escapeHtml(__("Low Stock"));?>
+      </div>
+   </a>
+   <?php $url = $block->getUrl("marketplace/product/productlist/type/out_of_stock");
+         $active = $type == $outOfStock ? "active" :"";
+    ?>
+   <a href="<?= $escaper->escapeUrl($url) ?>" class="<?= $escaper->escapeHtml($active);?>">
+      <div class="wk-product-count">
+         <?= $escaper->escapeHtml($block->getOutOfStockProduct());?>
+      </div>
+      <div>
+         <?= $escaper->escapeHtml(__("Out of Stock"));?>
+      </div>
+   </a>
+   <?php
+    if ($block->isProductApprovalEnable()) {
+        $url = $block->getUrl("marketplace/product/productlist/type/pending");
+        $active = $type == $pending ? "active" :"";
+        ?>
+   <a href="<?= $escaper->escapeUrl($url) ?>" class="<?= $escaper->escapeHtml($active);?>">
+      <div class="wk-product-count">
+         <?= $escaper->escapeHtml($block->getPendingProduct());?>
+      </div>
+      <div>
+         <?= $escaper->escapeHtml(__("Pending Products"));?>
+      </div>
+   </a>
+        <?php
+    }
+      $url = $block->getUrl("marketplace/product/productlist/type/deny");
+      $active = ($type == $deny ) ? "active" :"";
+    ?>
+   <a href="<?= $escaper->escapeUrl($url) ?>" class="<?= $escaper->escapeHtml($active);?>">
+      <div class="wk-product-count">
+         <?= $escaper->escapeHtml($block->getDeniedProduct());?>
+      </div>
+      <div>
+         <?= $escaper->escapeHtml(__("Denied Products"));?>
+      </div>
+   </a>
+</div>

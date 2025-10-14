@@ -1,0 +1,41 @@
+<?php
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_Marketplace
+ * @author    Webkul Software Private Limited
+ * @copyright Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+?>
+<div id="messages" class="success_profile_msg" style="display:none;margin-bottom:0px;margin-top:2px;">
+    <div class="messages">
+        <div class="message message-success success">
+            <div data-ui-id="messages-message-success">
+                <?= $escaper->escapeHtml(__("Shop name is available.")); ?>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="messages" class="error_profile_msg" style="display:none;margin-bottom:0px;margin-top:2px;">
+    <div class="messages">
+        <div class="message message-error error">
+            <div data-ui-id="messages-message-error">
+                <?= $escaper->escapeHtml(__("Shop name is already exists.")); ?>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "verifyShop": {
+                "ajaxCheckUrl": "<?= $escaper->escapeUrl($block->getAjaxCheckUrl()) ?>"
+            }
+        }
+    }
+</script>
+<script>
+    require('mage/apply/main').apply();
+</script>

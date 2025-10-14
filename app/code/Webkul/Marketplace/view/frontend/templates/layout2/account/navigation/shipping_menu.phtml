@@ -1,0 +1,22 @@
+<?php
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_Marketplace
+ * @author    Webkul Software Private Limited
+ * @copyright Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+if ($block->isShippineAvlForSeller()) { ?>
+    <li data-ui-id="menu-webkul-marketplace-shipsetting-menu" class="item-menu parent level-1">
+        <strong class="wk-mp-submenu-group-title">
+            <span><?= $escaper->escapeHtml(__('Shipping Settings'))?></span>
+        </strong>
+        <div class="wk-mp-submenu">
+            <ul>
+                <?= $block->getChildHtml();?>
+            </ul>
+        </div>
+    </li>
+<?php } ?>

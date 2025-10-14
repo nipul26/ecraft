@@ -1,0 +1,180 @@
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_Marketplace
+ * @author    Webkul Software Private Limited
+ * @copyright Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+@import '_variables.less';
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .wk-card {
+        flex-direction: column;
+        a {
+            width: unset;
+        }
+    }
+    body[class*='marketplace-'] {
+        .page-main {
+            padding-top: 68px;
+        }
+    }
+    .ask-que-to-admin-style {
+        margin-bottom: 2rem;
+        position: unset;
+    }
+    .wk-dashboard-container {
+        .product.data.items {
+            .item.title {
+                & > .switch {
+                    padding: 0 2rem 0;
+                }
+            }
+        }
+        .wk-stats {
+            grid-template-columns: 1fr;
+        }
+        .wk-info-content {
+            align-items: center;
+            text-align: center;
+        }
+        .wk-report-filter {
+            background: @wk-activity-background-color;
+            padding: 2rem 2rem 0;
+            position: unset;
+            .ask-que-to-admin-style {
+                width: max-content;
+            }
+            .wk-ask-question {
+                flex-wrap: wrap;
+                justify-content: flex-end;
+            }
+        }
+        .wk-heading {
+            font-size: 14px;
+        }
+        .wk-total-container {
+            align-items: flex-start;
+        }
+        .wk-comment-rating {
+            justify-items: unset !important;
+        }
+        .wk-info-heading {
+            font-size: 15px;
+        }
+        .wk-order-img {
+            height: 55px;
+            width: 55px;
+        }
+    }
+    .wk-news-popup-container {
+        flex-direction: column;
+        height: 80vh;
+        overflow-y: auto;
+        padding: 30px;
+    }
+    .wk-order-sale,
+    .wk-order-block,
+    .wk-customer-block,
+    .wk-rating-main-block,
+    .wk-comment-n-review-item,
+    .wk-order-item {
+        grid-template-columns: unset !important;
+    }
+    .product.data.items {
+        position: relative;
+    }
+    .wk-graph-chart {
+        overflow-x: auto;
+    }
+    .wk-category-block,
+    .wk-top-product-block {
+        align-items: center;
+        flex-direction: column;
+    }
+    .wk-top-customer,
+    .wk-top-product,
+    .wk-top-category {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+    .wk-block-height {
+        & > div {
+            flex-basis: 50%;
+        }
+    }
+    .wk-comment-n-review-item {
+        justify-items: unset;
+        span {
+            display: none;
+        }
+    }
+    .wk-category-circle {
+        font-size: 18px;
+        height: 55px;
+        min-width: 55px;
+    }
+    .wk-order-date,
+    .wk-order-address.wk-order-detail,
+    .wk-category-label,
+    .wk-comment-label {
+        font-size: 12px;
+    }
+    .marketplace-account-dashboard.page-layout-seller-2columns-left {
+        .product.data.items {
+            margin: unset;
+        }
+    }
+
+    .admin__data-grid-header-row {
+        div {
+            &.admin__data-grid-filters-wrap {
+                border: 1px solid @wk-admin-header;
+                padding: 15px 15px;
+                position: unset;
+                top: 41px;
+                .admin__form-field {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__l) {
+    .wk-dashboard-container {
+        .wk-stats,
+        .wk-order-block,
+        .wk-customer-block {
+            grid-template-columns: 1fr;
+        }
+    }
+}
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .ask-que-to-admin-style {
+        margin: 1rem 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+    .marketplace-account-dashboard {
+        .column.main {
+            position: relative;
+        }
+    }
+    .wk-dashboard-container {
+        .product {
+            &.data {
+                &.items {
+                    &>.item {
+                        &.content {
+                            margin-top: 60px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

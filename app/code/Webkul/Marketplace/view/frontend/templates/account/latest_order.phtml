@@ -1,0 +1,72 @@
+<?php
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_Marketplace
+ * @author    Webkul Software Private Limited
+ * @copyright Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+?>
+<div class="wk-order-sale-container wk-border">
+    <div class="wk-latest-orders">
+        <div class="wk-graph-heading">
+            <?= $escaper->escapeHtml(__('Latest Order')) ?>
+        </div>
+        <a href="<?= $escaper->escapeUrl($block->getUrl("marketplace/order/history")) ?>">
+            <?= $escaper->escapeHtml(__('View All Orders')) ?>
+        </a>
+    </div>
+    <div class="wk-order-items wk-block-height grid-a-r">
+        <?php $orders = $block->getLatestOrder();
+        foreach ($orders as $order) {
+            $orderImages = $block->getOrderImage($order->getOrderId());
+            ?>
+            <a href="<?= $escaper->escapeUrl($block->getUrl(
+                "marketplace/order/view",
+                ["id" => $order->getOrderId()]
+            )); ?>" target="_blank">
+                <div class="wk-order-item">
+                    <div class="wk-order-detail grid-a-r">
+                    
+                            <div class="wk-info-heading">
+                                <?= $escaper->escapeHtml($order->getMagerealorderId()) ?>
+                            </div>
+                    
+                        <div class="wk-order-date">
+                            <?= $escaper->escapeHtml($block->getConvertedDate($order->getCreatedAt())) ?>
+                        </div>
+                        <div class="wk-order-status wk-order-<?= $escaper->escapeHtml($order->getStatus()) ?>" >
+                            <?= $escaper->escapeHtml(ucfirst($order->getStatus())) ?>
+                        </div>
+                    </div>
+                    <div class="wk-order-detail grid-a-r">
+                        <div class="wk-info-heading">
+                            <?= $escaper->escapeHtml($block->getFormatedPrice($order->getActualSellerAmount())) ?>
+                        </div>
+                        <div class="wk-order-address wk-order-detail">
+                            <div>
+                                <?= $escaper->escapeHtml($order->getCustomerName()) ?>
+                            </div>
+                            <div>
+                                <?= $escaper->escapeHtml($order->getShippingAddress()) ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wk-order-image-container">
+                        <?php foreach ($orderImages as $orderImage) { ?>
+                            <div class="wk-order-image-wrap">
+                                <img class="wk-order-img" src="<?= $escaper->escapeHtml($orderImage["image"]) ?>"
+                                alt="<?= $escaper->escapeHtml($orderImage["name"]) ?>">
+                                <span class="wk-order-product-count">
+                                    <?= $escaper->escapeHtml($orderImage["qty"]) ?>
+                                </span>
+                            </div>
+                        <?php } ?>
+                    </div>
+                </div>
+            </a>
+        <?php } ?>
+    </div>
+</div>

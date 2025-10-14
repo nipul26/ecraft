@@ -1,0 +1,156 @@
+<?php
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_Marketplace
+ * @author    Webkul Software Private Limited
+ * @copyright Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+$viewModel = $block->getViewModel();
+$helper = $viewModel->getHelper();
+$orderHelper = $viewModel->getOrderHelper();
+$isPartner = $helper->isSeller();
+if ($isPartner == 1) {
+    $orderId = $block->getRequest()->getParam('id');
+    $order = $block->getOrder();
+    $orderStatusLabel = $order->getStatusLabel();
+    $paymentMethod = '';
+    if ($order->getPayment()) {
+        $paymentMethod = $order->getPayment()->getMethodInstance()->getTitle();
+    }
+
+    $marketplaceOrders = $block->getSellerOrderInfo($orderId);
+    if (count($marketplaceOrders)) {
+        $tracking=$orderHelper->getOrderinfo($orderId);
+        if ($tracking->getIsCanceled()) {
+            $orderStatusLabel='Canceled';
+        }
+        ?>
+        <div class="wk_mp_design">
+            <div class="fieldset wk_mp_fieldset" id="wk_mp_print_order">
+                <div class="page-title-wrapper">
+                    <h1 class="page-title">
+                        <span data-ui-id="page-title-wrapper" class="base">
+                            <?= $escaper->escapeHtml(__('Order #%1', $order->getRealOrderId())) ?>
+                        </span>
+                    </h1>
+                    <span class="order-status"><?= $escaper->escapeHtml($orderStatusLabel)?></span>
+                    <div class="order-date">
+                        <span class="label"><?= $escaper->escapeHtml(__("Order Date"))?>:</span>
+                        <date>
+                            <?= /* @noEscape */ $block
+                            ->formatDate($order->getCreatedAt(), \IntlDateFormatter::MEDIUM, true, $block
+                            ->getTimezoneForStore($order->getStore())) ?>
+                        </date>
+                    </div>
+                    <div class="actions-toolbar order-actions-toolbar">
+                        <div class="actions">
+                            <a onclick="this.target='_blank';" href="<?= $escaper->escapeUrl($block->
+                            getUrl('marketplace/order/printorder', ['id'=>$orderId, '_secure' => $block
+                            ->getRequest()->isSecure()]));?>" class="action print">
+                                <button class="button wk_mp_btn " title="<?= $escaper->escapeHtml(__('Print')) ?>"
+                                 type="submit" id="save_butn" >
+                                    <span><span><?= $escaper->escapeHtml(__('Print')) ?></span></span>
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="order-details-items ordered">
+                    <div class="order-title">
+                        <strong><?= $escaper->escapeHtml(__('Items Ordered')) ?></strong>
+                    </div>
+                    <?= $block->getChildHtml('marketplace_order_items') ?>
+                </div>
+                <?php if ($helper->getSellerProfileDisplayFlag()) { ?>
+                    <div class="block block-order-details-view">
+                        <div class="block-title">
+                            <strong><?= $escaper->escapeHtml(__('Buyer Information')) ?></strong>
+                        </div>
+                        <div class="block-content">
+                            <div class="box-content">
+                                <div class="box">
+                                    <div class="wk_row">
+                                        <span class="label"><?= $escaper->escapeHtml(__('Customer Name'))?> : </span>
+                                        <span class="value"><?= $escaper->escapeHtml($order
+                                        ->getCustomerName()); ?></span>
+                                    </div>
+                                    <div class="wk_row">
+                                        <span class="label"><?= $escaper->escapeHtml(__('Email'))?> : </span>
+                                        <span class="value"><?= $escaper->escapeHtml($order->getCustomerEmail()); ?>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php } ?>
+                <div class="block block-order-details-view">
+                    <div class="block-title">
+                        <strong><?= $escaper->escapeHtml(__('Order Information')) ?></strong>
+                    </div>
+                    <div class="block-content">
+                        <?php if ($helper->getSellerProfileDisplayFlag()) { ?>
+                            <?php if ($block->isOrderCanShip($order)): ?>
+                                <div class="box box-order-shipping-address">
+                                    <strong class="box-title"><span>
+                                        <?= $escaper->escapeHtml(__('Shipping Address')) ?></span></strong>
+                                    <div class="box-content">
+                                        <address><?= /* @noEscape */ $block->getFormattedAddress($order
+                                        ->getShippingAddress()); ?></address>
+                                    </div>
+                                </div>
+
+                                <div class="box box-order-shipping-method">
+                                    <strong class="box-title">
+                                        <span><?= $escaper->escapeHtml(__('Shipping Method')) ?></span>
+                                    </strong>
+                                    <div class="box-content">
+                                    <?php if ($order->getShippingDescription()): ?>
+                                        <?= $escaper->escapeHtml($order->getShippingDescription()) ?>
+                                    <?php else: ?>
+                                        <?= $escaper->escapeHtml(__('No shipping information available')); ?>
+                                    <?php endif; ?>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                            <div class="box box-order-billing-address">
+                                <strong class="box-title">
+                                    <span><?= $escaper->escapeHtml(__('Billing Address')) ?></span>
+                                </strong>
+                                <div class="box-content">
+                                    <address><?= /* @noEscape */ $block->getFormattedAddress($order
+                                    ->getBillingAddress()); ?></address>
+                                </div>
+                            </div>
+                        <?php } ?>
+                        <div class="box box-order-billing-method">
+                            <strong class="box-title">
+                                <span><?= $escaper->escapeHtml(__('Payment Method')) ?></span>
+                            </strong>
+                            <div class="box-content">
+                                <?= $escaper->escapeHtml($paymentMethod); ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="buttons-set">
+            <p class="back-link">
+                <a href="<?= $escaper->escapeUrl($block
+                ->getUrl('marketplace/order/history', ['_secure' => $block
+                ->getRequest()->isSecure()]));?>" class="left">&laquo;
+                <?= $escaper->escapeHtml(__('Back To My Orders')) ?></a>
+            </p>
+        </div>
+        <?php
+    }
+} else { ?>
+    <h2 class="wk_mp_error_msg">
+        <?= $escaper->escapeHtml(__("To Become Seller Please Contact to Admin.")); ?>
+    </h2>
+    <?php
+} ?>

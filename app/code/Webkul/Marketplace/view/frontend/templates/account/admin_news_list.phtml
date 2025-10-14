@@ -1,0 +1,55 @@
+<?php
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_Marketplace
+ * @author    Webkul Software Private Limited
+ * @copyright Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+$publishedNews = $block->getCollection();
+?>
+<?php if ($publishedNews->getSize()) { ?>
+    <div class="mark-as-read-container">
+        <a href="<?= $escaper->escapeUrl($block->getUrl("marketplace/seller/markread")) ?>">
+            <button class="wk-mark-as-read"><?= $escaper->escapeHtml(__('Mark as read')) ?></button>
+        </a>
+    </div>
+<?php } ?>
+<fieldset class="fieldset">
+    <?php
+    if ($publishedNews->getSize()) {
+        ?>
+        <ul class="wk-news-items">
+            <?php foreach ($publishedNews as $item):
+                    $isActive = $item->getIsRead()?"":"active";
+                    $date = $block->convertDate($item->getCreationDate());
+                ?>
+                <li class="wk-news-item <?= $escaper->escapeHtml($isActive);?>">
+                    <p>
+                        <?= /* @noEscape */ $item->getContent() ?>
+                    </p>
+                    <div class="wk-news-date">
+                        <?= $escaper->escapeHtml(__('Admin')); ?> - <?= $escaper->escapeHtml(__($date)); ?>
+                    </div>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+        <?php if ($block->getPagerHtml()): ?>
+            <div class="toolbar bottom">
+                <?= $block->getPagerHtml() ?>
+            </div>
+        <?php endif ?>
+    <?php } else { ?>
+            <div class="message info empty">
+                <span><?= $escaper->escapeHtml('No News Found') ?></span>
+            </div>
+    <?php  } ?>
+</fieldset>
+<div class="buttons-set">
+    <p class="back-link">
+        <a href="javascript:;" 
+        onclick="javascript: window.history.back();" class="left">&laquo; <?= $escaper->escapeHtml(__('Back')) ?></a>
+    </p>
+</div>

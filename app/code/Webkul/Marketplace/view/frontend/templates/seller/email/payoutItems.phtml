@@ -1,0 +1,48 @@
+<?php
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_Marketplace
+ * @author    Webkul Software Private Limited
+ * @copyright Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+$items = $block->getOrderItems();
+?>
+<table class="email-items">
+    <thead>
+        <tr>
+            <th class="item-info"><?= $escaper->escapeHtml(__("Order Id #"));?></th>
+            <th class="item-info"><?= $escaper->escapeHtml(__("Product Name"));?></th>
+            <th class="item-qty"><?= $escaper->escapeHtml(__("Qty"));?></th>
+            <th class="item-price"><?= $escaper->escapeHtml(__("Price"));?></th>
+            <th class="item-price"><?= $escaper->escapeHtml(__("Commission"));?></th>
+            <th class="item-price"><?= $escaper->escapeHtml(__("Total payout amount"));?></th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($items as $item) { ?>
+            <tr>
+                <td class='item-info'><?= $escaper->escapeHtml($item["orderId"]); ?></td>
+                <td class='item-info'><?= $escaper->escapeHtml($item["productName"]); ?></td>
+                <td class='item-qty'><?= $escaper->escapeHtml($item["qty"]); ?></td>
+                <td class='item-price'>
+                    <span class="price">
+                        <?= $escaper->escapeHtml($item["price"]); ?>
+                    </span>
+                </td>
+                <td class='item-price'>
+                    <span class="price">
+                        <?= $escaper->escapeHtml($item["commission"]); ?>
+                    </span>
+                </td>
+                <td class='item-price'>
+                    <span class="price">
+                        <?= $escaper->escapeHtml($item["totalPayout"]); ?>
+                    </span>
+                </td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>

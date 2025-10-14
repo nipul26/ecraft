@@ -1,0 +1,40 @@
+<!--
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_Marketplace
+ * @author    Webkul Software Private Limited
+ * @copyright Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+-->
+<!--@subject {{trans "Become Seller Request"}}  @-->
+<!--@vars {
+"var sellerName":"Seller Name",
+"var sellerUrl":"Seller Url",
+"var adminName":"Admin Name"
+} @-->
+
+{{template config_path="design/email/header_template"}}
+
+<table>
+    <tr class="email-intro">
+        <td>
+            <p class="greeting">{{trans "%adminName," adminName=$adminName}}</p>
+        </td>
+    </tr>
+    <tr class="email-information">
+        <td>
+            <table class="query-details">
+                <tr>
+                    <td class="product-details">
+                        <p>{{trans "This is to inform you that %sellerName has requested to become a seller. Please <a href="%sellerUrl">Click here</a> to login." sellerName=$sellerName sellerUrl=$sellerUrl |raw}}</p>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+{{template config_path="design/email/footer_template"}}

@@ -1,0 +1,24 @@
+<?php
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_Marketplace
+ * @author    Webkul Software Private Limited
+ * @copyright Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+$rating = $block->getRating();
+$star = $block->getStar();
+?>
+<div class="wk-rating-detail-container">
+    <div class="wk-rating-icon-small wk-heading">
+        <?= $escaper->escapeHtml($star);?>
+    </div>
+    <div class="wk-rating-container">
+        <div class="wk-rating" style="width: <?= $escaper->escapeHtml($rating);?>%;"></div>
+    </div>
+    <div class="wk-heading">
+        <?= $escaper->escapeHtml($rating."%");?>
+    </div>
+</div>

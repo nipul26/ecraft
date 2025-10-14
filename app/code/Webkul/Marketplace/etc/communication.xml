@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Webkul Software.
+ *
+ * @category  Webkul
+ * @package   Webkul_Marketplace
+ * @author    Webkul Software Private Limited
+ * @copyright Webkul Software Private Limited (https://webkul.com)
+ * @license   https://store.webkul.com/license.html
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Communication/etc/communication.xsd">
+    <topic name="seller.product.lowstock" request="string">
+        <handler name="seller.product.lowstock" type="Webkul\Marketplace\Model\Consumer\LowStockConsumer" method="process" />
+    </topic>
+    <topic name="admin.news.published" request="string">
+        <handler name="admin.news.published" type="Webkul\Marketplace\Model\Consumer\AdminNewsPublishedConsumer" method="process" />
+    </topic>
+</config>
