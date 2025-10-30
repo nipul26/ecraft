@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Customer\Api\AccountManagementInterface" type="Codezspark\Mobilelogin\Model\AccountManagement" />
+    <preference for="Magento\Customer\Block\Form\Login" type="Codezspark\Mobilelogin\Block\Form\Login"/>
+    <type name="Magento\Customer\Model\ResourceModel\Customer">
+        <plugin name="mobilelogin_validate_uniquenumber" type="Codezspark\Mobilelogin\Plugin\Model\ResourceModel\Customer\Validateuniquenumber" sortOrder="10" disabled="false" />
+    </type>
+    <preference for="Codezspark\Mobilelogin\Api\MobileloginInterface" type="Codezspark\Mobilelogin\Model\Api\Mobilelogin"/>
+</config>
