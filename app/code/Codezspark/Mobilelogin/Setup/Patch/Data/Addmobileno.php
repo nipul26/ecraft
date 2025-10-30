@@ -13,7 +13,7 @@ class Addmobileno implements DataPatchInterface
      protected $customerSetupFactory;
      protected $moduleDataSetup;
      protected $setup;
-     const MOBILENUMBER = 'mobilenumber';
+     const MOBILENUMBER = 'mobile_number';
 
     public function __construct(\Magento\Customer\Setup\CustomerSetupFactory $customerSetupFactory, ModuleDataSetupInterface $moduleDataSetup)
     {
@@ -29,7 +29,7 @@ class Addmobileno implements DataPatchInterface
 
             $customerSetup->addAttribute(
                 Customer::ENTITY,
-                'mobilenumber',
+                'mobile_number',
                 [
                 'type' => 'varchar',
                 'label' => 'Mobile Number',
@@ -47,14 +47,14 @@ class Addmobileno implements DataPatchInterface
                 'filterable' => true,
                 'comparable' => true,
                 'visible_on_front' => true,
-                'unique' => false,
+                'unique' => true,
                 'apply_to' => ''
                 ]
             );
 
         // add attribute to form
         /** @var  $attribute */
-        $attribute = $customerSetup->getEavConfig()->getAttribute(Customer::ENTITY, 'mobilenumber');
+        $attribute = $customerSetup->getEavConfig()->getAttribute(Customer::ENTITY, 'mobile_number');
         $used_in_forms[]="adminhtml_customer";
         $used_in_forms[]="checkout_register";
         $used_in_forms[]="customer_account_create";
