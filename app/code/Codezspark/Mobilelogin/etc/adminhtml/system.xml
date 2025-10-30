@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="codezspark">
+            <label>Codezspark</label>
+        </tab>
+        <section id="mobilelogin" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Mobile Login</label>
+            <tab>codezspark</tab>
+            <resource>Codezspark_Mobilelogin::mobileloginconfig</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Configuration</label>
+                <field id="enable" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Mobile Login Free</label>
+                    <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
+                </field>
+                <field id="loginmode" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Customer Login With</label>
+                    <source_model>Codezspark\Mobilelogin\Model\Config\Source\Loginmode</source_model>
+                    <depends><field id="enable">1</field></depends>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
