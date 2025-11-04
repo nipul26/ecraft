@@ -6,4 +6,7 @@
     <type name="Magento\Customer\Model\AccountManagement">
         <plugin name="codezspark_customer_forgot_password_plugin" type="Codezspark\Customer\Plugin\CustomerForgotPasswordPlugin" sortOrder="20" disabled="false"/>
     </type>
+    <type name="Magento\Customer\Api\CustomerRepositoryInterface">
+        <plugin name="check_unique_mobile_number" type="Codezspark\Customer\Plugin\MobileNumberUniquePlugin" sortOrder="30" disabled="false"/>
+    </type>
 </config>
