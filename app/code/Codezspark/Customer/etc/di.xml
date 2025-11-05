@@ -9,4 +9,7 @@
     <type name="Magento\Customer\Api\CustomerRepositoryInterface">
         <plugin name="check_unique_mobile_number" type="Codezspark\Customer\Plugin\MobileNumberUniquePlugin" sortOrder="30" disabled="false"/>
     </type>
+    <type name="Magento\Customer\Api\AccountManagementInterface">
+        <plugin name="custom_create_account_response" type="Codezspark\Customer\Plugin\CreateAccountPlugin" sortOrder="40" disabled="false"/>
+    </type>
 </config>

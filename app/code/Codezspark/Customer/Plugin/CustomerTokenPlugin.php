@@ -4,6 +4,8 @@ namespace Codezspark\Customer\Plugin;
 
 use Magento\Integration\Model\CustomerTokenService;
 use Magento\Framework\Webapi\Rest\Response;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 class CustomerTokenPlugin
 {
@@ -13,12 +15,20 @@ class CustomerTokenPlugin
     protected $response;
 
     /**
+     * @var CustomerRepositoryInterface
+     */
+    protected $customerRepository;
+
+    /**
      * @param Response $response
+     * @param CustomerRepositoryInterface $customerRepository
      */
     public function __construct(
-        Response $response
+        Response $response,
+        CustomerRepositoryInterface $customerRepository
     ) {
         $this->response = $response;
+        $this->customerRepository = $customerRepository;
     }
 
     /**
@@ -36,14 +46,33 @@ class CustomerTokenPlugin
         $username,
         $password
     ) {
+        try {
+            $customer = $this->customerRepository->get($username);
 
-        $response = [
-            'status' => true,
-            'message' => 'Customer token generated successfully.',
-            'response' => [
-                'token' => $result
-            ]
-        ];
+            $mobileNumber = $customer->getCustomAttribute('mobile_number');
+            $mobileNumberValue = $mobileNumber ? $mobileNumber->getValue() : null;
+
+            $response = [
+                'status' => true,
+                'message' => 'Customer token generated successfully.',
+                'response' => [
+                    'token' => $result,
+                    'id' => $customer->getId(),
+                    'firstname' => $customer->getFirstname(),
+                    'lastname' => $customer->getLastname(),
+                    'email' => $customer->getEmail(),
+                    'phone_number' => $mobileNumberValue
+                ]
+            ];
+        } catch (LocalizedException $e) {
+            $response = [
+                'status' => false,
+                'message' => 'Unable to retrieve customer data.',
+                'response' => [
+                    'token' => $result
+                ]
+            ];
+        }
 
         return $this->response->setBody(json_encode($response))->sendResponse();
     }
