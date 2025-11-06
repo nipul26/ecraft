@@ -1,0 +1,37 @@
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route url="/V1/wishlist" method="POST">
+        <service class="CodezSparkMobile\WishlistApi\Api\WishlistManagementInterface" method="add"/>
+        <resources>
+            <!-- <resource ref="CodezSparkMobile_WishlistApi::manage_wishlist"/> -->
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+    <route url="/V1/wishlist" method="GET">
+        <service class="CodezSparkMobile\WishlistApi\Api\WishlistManagementInterface" method="get"/>
+        <resources>
+            <!-- <resource ref="CodezSparkMobile_WishlistApi::manage_wishlist"/> -->
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+    <route url="/V1/wishlist/update/:itemId" method="POST">
+        <service class="CodezSparkMobile\WishlistApi\Api\WishlistManagementInterface" method="update"/>
+        <resources>
+            <!-- <resource ref="CodezSparkMobile_WishlistApi::manage_wishlist"/> -->
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+    <route url="/V1/wishlist/:itemId" method="DELETE">
+        <service class="CodezSparkMobile\WishlistApi\Api\WishlistManagementInterface" method="delete"/>
+        <resources>
+            <!-- <resource ref="CodezSparkMobile_WishlistApi::manage_wishlist"/> -->
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+    <route url="/V1/wishlist/move" method="POST">
+        <service class="CodezSparkMobile\WishlistApi\Api\WishlistManagementInterface" method="move"/>
+        <resources>
+            <!-- <resource ref="CodezSparkMobile_WishlistApi::manage_wishlist"/> -->
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+</routes>
