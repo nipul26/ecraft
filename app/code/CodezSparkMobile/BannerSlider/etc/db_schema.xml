@@ -4,5 +4,6 @@
     <table name="mageplaza_bannerslider_banner">
         <column xsi:type="varchar" name="carousel_image_type" nullable="true" length="50" comment="Carousel Image Type"/>
         <column xsi:type="int" name="entity_id" nullable="true" comment="Product/Category ID"/>
+        <column xsi:type="smallint" name="is_for_mobile" nullable="true" comment="Is For Mobile (Yes/No)"/>
     </table>
 </schema>

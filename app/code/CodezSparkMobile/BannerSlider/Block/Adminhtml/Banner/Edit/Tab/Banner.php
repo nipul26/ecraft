@@ -34,6 +34,18 @@ class Banner extends \Mageplaza\BannerSlider\Block\Adminhtml\Banner\Edit\Tab\Ban
             'class' => 'validate-number'
         ]);
 
+         $fieldset->addField('is_for_mobile', 'select', [
+            'name' => 'is_for_mobile',
+            'label' => __('Is For Mobile'),
+            'title' => __('Is For Mobile'),
+            'required' => false,
+            'values' => [
+                ['value' => 1, 'label' => __('Yes')],
+                ['value' => 0, 'label' => __('No')],
+            ],
+            'note' => __('Select Yes if this banner should be displayed only on mobile devices.'),
+        ]);
+        
         $model = $this->_coreRegistry->registry('mpbannerslider_banner');
         $form->addValues($model->getData());
 
