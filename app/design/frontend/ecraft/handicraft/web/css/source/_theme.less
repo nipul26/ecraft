@@ -29,6 +29,8 @@
 
 //  Links
 @link__color: @theme-primary-color;
+@link__hover__color: @link__color;
+@link__active__color: @link__color;
 
 
 //  Focus
@@ -115,11 +117,13 @@
 @button__font-weight: @font-weight__semibold;
 
 //  Default = secondary button
-@button__background: @color-gray-darken0;
-@button__border: 1px solid @border-color__base;
-@button__hover__color: @button__color;
-@button__hover__background: darken(@button__background, 5%);
-@button__active__background: @color-gray-darken1;
+@button__color: @theme-primary-color;
+@button__background: @color-white;
+@button__border: 1px solid @theme-primary-color;
+@button__hover__color: @color-white;
+@button__hover__background: @theme-primary-color;
+@button__active__color: @color-white;
+@button__active__background: @theme-primary-color;
 
 //  Primary button
 @button-primary__background: @theme-primary-color;
