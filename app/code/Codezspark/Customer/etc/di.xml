@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\Integration\Model\CustomerTokenService">
-        <plugin name="codezspark_customer_token_plugin" type="Codezspark\Customer\Plugin\CustomerTokenPlugin" sortOrder="10" disabled="false"/>
+        <plugin name="codezspark_customer_token_response_plugin" type="Codezspark\Customer\Plugin\CustomerTokenPlugin" sortOrder="10" disabled="false"/>
     </type>
     <type name="Magento\Customer\Model\AccountManagement">
-        <plugin name="codezspark_customer_forgot_password_plugin" type="Codezspark\Customer\Plugin\CustomerForgotPasswordPlugin" sortOrder="20" disabled="false"/>
+        <plugin name="codezspark_customer_forgot_password_response_plugin" type="Codezspark\Customer\Plugin\CustomerForgotPasswordPlugin" sortOrder="20" disabled="false"/>
     </type>
     <type name="Magento\Customer\Api\CustomerRepositoryInterface">
         <plugin name="check_unique_mobile_number" type="Codezspark\Customer\Plugin\MobileNumberUniquePlugin" sortOrder="30" disabled="false"/>
@@ -14,5 +14,11 @@
     </type>
     <type name="Magento\Webapi\Controller\Rest\InputParamsResolver">
         <plugin name="extract_mobile_number" type="Codezspark\Customer\Plugin\InputParamsResolverPlugin" sortOrder="50" disabled="false"/>
+    </type>
+    <type name="Magento\Integration\Api\AdminTokenServiceInterface">
+        <plugin name="codezspark_admin_token_response_plugin" type="Codezspark\Customer\Plugin\AdminTokenPlugin" sortOrder="60" disabled="false"/>
+    </type>
+    <type name="Magento\Catalog\Api\CategoryManagementInterface">
+        <plugin name="codezspark_category_response_plugin" type="Codezspark\Customer\Plugin\CategoryResponsePlugin" sortOrder="70" disabled="false"/>
     </type>
 </config>
