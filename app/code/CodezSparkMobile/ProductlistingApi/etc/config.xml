@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <homepage_api_configuration>
+            <product_list_config>
+                <product_limit>10</product_limit>
+                <image_width>300</image_width>
+                <image_height>300</image_height>
+            </product_list_config>
+        </homepage_api_configuration>
+    </default>
+</config>

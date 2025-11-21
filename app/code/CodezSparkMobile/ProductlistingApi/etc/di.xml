@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="CodezSparkMobile\ProductlistingApi\Api\Data\ProductInterface" type="CodezSparkMobile\ProductlistingApi\Model\Product" />
+    <preference for="CodezSparkMobile\ProductlistingApi\Api\ProductlistInterface" type="CodezSparkMobile\ProductlistingApi\Model\Productlist" />
+    <preference for="CodezSparkMobile\ProductlistingApi\Api\Data\SettingDataInterface" type="CodezSparkMobile\ProductlistingApi\Model\SettingData"/>
+    <preference for="CodezSparkMobile\ProductlistingApi\Api\Data\SettingsInterface" type="CodezSparkMobile\ProductlistingApi\Model\SettingsData"/>
+    <preference for="CodezSparkMobile\ProductlistingApi\Api\Data\ProductSearchResultsInterface" type="CodezSparkMobile\ProductlistingApi\Model\SearchResults"/>
+    <preference for="CodezSparkMobile\ProductlistingApi\Api\Data\FilterDataInterface" type="CodezSparkMobile\ProductlistingApi\Model\FilterData"/>
+    <preference for="CodezSparkMobile\ProductlistingApi\Api\Data\OptionInterface" type="CodezSparkMobile\ProductlistingApi\Model\Option"/>
+    <preference for="CodezSparkMobile\ProductlistingApi\Api\Data\SortingDataInterface" type="CodezSparkMobile\ProductlistingApi\Model\SortingData"/>
+    <preference for="CodezSparkMobile\ProductlistingApi\Api\Data\ProductBadgesInterface" type="CodezSparkMobile\ProductlistingApi\Model\ProductBadges"/>
+</config>
