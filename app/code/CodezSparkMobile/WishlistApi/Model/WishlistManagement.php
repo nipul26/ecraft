@@ -120,9 +120,12 @@ class WishlistManagement implements WishlistManagementInterface
         $wishlist = $this->wishlistFactory->create()->loadByCustomerId($customerId);
 
         if (!$wishlist->getId()) {
-            $wishlist['items'] = [];
-            $wishlist['error'] = ['Customer does not yet have a wishlist'];
-            return $this->response->setBody(json_encode($wishlist))->sendResponse();
+           $data = [
+                'status'  => false,
+                'message' => __('Customer does not yet have a wishlist'),
+                'data'   => []
+            ];
+            return $this->response->setBody(json_encode($data))->sendResponse();
         }
 
         $helperPool = $this->configurationPool;
@@ -162,9 +165,12 @@ class WishlistManagement implements WishlistManagementInterface
                 // Ignore errors for individual products
             }
         }
-
         $wishlist['items'] = $productItems;
-        return $this->response->setBody(json_encode($wishlist->getData()))->sendResponse();;
+        $data['status'] = true;
+        $data['message'] = __('Customer wishlist retrieved successfully.');
+        $data['data'] = $wishlist->getData();
+        
+        return $this->response->setBody(json_encode($data))->sendResponse();;
     }
 
     /**
@@ -265,14 +271,18 @@ class WishlistManagement implements WishlistManagementInterface
         $product = $result->getProduct();
         $wishlistObj = $result->getWishlist();
 
-        $data = $result->getData();
+        $responseData = $result->getData();
 
         if ($product) {
-            $data['product'] = $product->getData();
+            $responseData['product'] = $product->getData();
         }
         if ($wishlistObj) {
-            $data['wishlist'] = $wishlistObj->getData();
+            $responseData['wishlist'] = $wishlistObj->getData();
         }
+
+        $data['status'] = true;
+        $data['message'] = __('Product added to wishlist successfully.');
+        $data['data'] = $responseData;
 
         return $this->response
             ->setBody(json_encode($data))
@@ -354,11 +364,15 @@ class WishlistManagement implements WishlistManagementInterface
             ['wishlist' => $wishlist, 'product' => $product, 'item' => $wishlist->getItem($itemId)]
         );
 
-        $data = $result->getData();
+        $responseData = $result->getData();
         if ($product) {
-            $data['product'] = $product->getData();
+            $responseData['product'] = $product->getData();
         }
 
+        $data['status'] = true;
+        $data['message'] = __('Product added to wishlist successfully.');
+        $data['data'] = $responseData;
+        
         return $this->response
             ->setBody(json_encode($data))
             ->sendResponse();
@@ -377,10 +391,10 @@ class WishlistManagement implements WishlistManagementInterface
     {
         $wishlist = $this->wishlistFactory->create()->loadByCustomerId($customerId, true);
         $buyRequest = new DataObject();
-
         $quote = $this->cartRepository->get($quoteId);
         $quoteItems = $quote->getAllVisibleItems();
         $status = false;
+        $data = [];
 
         try {
             foreach ($quoteItems as $quoteItem) {
@@ -388,7 +402,11 @@ class WishlistManagement implements WishlistManagementInterface
                 $product = $this->productRepository->getById($_productId);
 
                 if (!$product->isVisibleInCatalog()) {
-                    throw new LocalizedException(__("Sorry, this item can't be added to wishlists"), null, 1);
+                    $data['status'] = false;
+                    $data['message'] = __("Sorry, this item can't be added to wishlist");
+                    $data['response'] = [];
+
+                    return $this->response->setBody(json_encode($data))->sendResponse();
                 }
 
                 if ($quoteItem->getId() == $itemId) {
@@ -398,82 +416,123 @@ class WishlistManagement implements WishlistManagementInterface
                 }
             }
 
+            if (!$status) {
+                $data['status'] = false;
+                $data['message'] = __("Cart item not found.");
+                $data['response'] = [];
+
+                return $this->response->setBody(json_encode($data))->sendResponse();
+            }
+
             $options = $buyRequest->getOptions();
-            if ($buyRequest->getOptions()) {
-                foreach ($buyRequest->getOptions() as $key => $option) {
-                    if (is_array($option)) {
-                        if (isset($option['date_internal'])) {
-                            unset($options[$key]);
-                            $options[$key] = $option['date_internal'];
-                        }
+            if ($options) {
+                foreach ($options as $key => $option) {
+                    if (is_array($option) && isset($option['date_internal'])) {
+                        unset($options[$key]);
+                        $options[$key] = $option['date_internal'];
                     }
                 }
                 $buyRequest->setData('options', $options);
             }
 
-            if ($status) {
-                $result = $wishlist->addNewItem($product, $buyRequest);
+            $result = $wishlist->addNewItem($product, $buyRequest);
 
-                if (is_string($result)) {
-                    throw new LocalizedException(__($result), null, 2);
-                }
+            if (is_string($result)) {
+                $data['status'] = false;
+                $data['message'] = __($result);
+                $data['response'] = [];
 
-                if ($wishlist->isObjectNew()) {
-                    $wishlist->save();
-                }
-
-                try {
-                    $quoteItem=$this->quoteItem->load($itemId);
-                    $quoteItem->delete();
-                } catch (\Exception $e) {
-                    throw new LocalizedException(__('Unable to remove item from cart: %1', $e->getMessage()));
-                }
-
-                $this->eventManager->dispatch(
-                    'wishlist_add_product',
-                    ['wishlist' => $wishlist, 'product' => $product, 'item' => $result]
-                );
-
-                $product = $result->getProduct();
-                $wishlistObj = $result->getWishlist();
-
-                $data = $result->getData();
-
-                if ($product) {
-                    $data['product'] = $product->getData();
-                }
-                if ($wishlistObj) {
-                    $data['wishlist'] = $wishlistObj->getData();
-                }
-
-                return $this->response
-                    ->setBody(json_encode($data))
-                    ->sendResponse();
-
+                return $this->response->setBody(json_encode($data))->sendResponse();
             }
+
+            if ($wishlist->isObjectNew()) {
+                $wishlist->save();
+            }
+
+            try {
+                $quoteItem = $this->quoteItem->load($itemId);
+                $quoteItem->delete();
+            } catch (\Exception $e) {
+                $data['status'] = false;
+                $data['message'] = __("Unable to remove item from cart: %1", $e->getMessage());
+                $data['response'] = [];
+                return $this->response->setBody(json_encode($data))->sendResponse();
+            }
+
+            $this->eventManager->dispatch(
+                'wishlist_add_product',
+                ['wishlist' => $wishlist, 'product' => $product, 'item' => $result]
+            );
+
+            $product = $result->getProduct();
+            $wishlistObj = $result->getWishlist();
+
+            $responseData = $result->getData();
+
+            if ($product) {
+                $responseData['product'] = $product->getData();
+            }
+            if ($wishlistObj) {
+                $responseData['wishlist'] = $wishlistObj->getData();
+            }
+
+            $data['status'] = true;
+            $data['message'] = __('Product moved to wishlist successfully.');
+            $data['response'] = $responseData;
+
+            return $this->response
+                ->setBody(json_encode($data))
+                ->sendResponse();
+
         } catch (\Exception $e) {
-            throw new LocalizedException(__($e->getMessage()), null, 1);
+
+            $data['status'] = false;
+            $data['message'] = __("");
+            $data['response'] = [];
+
+            return $this->response->setBody(json_encode($data))->sendResponse();
         }
     }
+
 
     /**
      * Delete item from wishlist
      *
      * @param int $customerId
      * @param int $itemId
-     * @return bool
-     * @throws \Exception
+     * @return mixed
      */
-    public function delete(int $customerId, int $itemId): bool
+    public function delete(int $customerId, int $itemId)
     {
-        $wishlist = $this->wishlistFactory->create()->loadByCustomerId($customerId);
-        $item = $wishlist->getItem($itemId);
+        $data = [];
 
-        if (!$item) {
-            throw new NoSuchEntityException(__('No item with ID %1', $itemId));
+        try {
+            $wishlist = $this->wishlistFactory->create()->loadByCustomerId($customerId);
+            $item = $wishlist->getItem($itemId);
+
+            if (!$item) {
+                $data['status'] = false;
+                $data['message'] = __('No wishlist item found with ID %1', $itemId);
+                $data['response'] = [];
+
+                return $this->response->setBody(json_encode($data))->sendResponse();
+            }
+
+            $item->delete();
+
+            $data['status'] = true;
+            $data['message'] = __('Wishlist item deleted successfully.');
+            $data['response'] = [];
+
+            return $this->response->setBody(json_encode($data))->sendResponse();
+
+        } catch (\Exception $e) {
+
+            $data['status'] = false;
+            $data['message'] = __("Please try again later.");
+            $data['response'] = [];
+
+            return $this->response->setBody(json_encode($data))->sendResponse();
         }
-
-        $item->delete();
-        return true;
     }
 }
