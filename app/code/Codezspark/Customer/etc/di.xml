@@ -8,17 +8,21 @@
     </type>
     <type name="Magento\Customer\Api\CustomerRepositoryInterface">
         <plugin name="check_unique_mobile_number" type="Codezspark\Customer\Plugin\MobileNumberUniquePlugin" sortOrder="30" disabled="false"/>
+        <plugin name="codezspark_customer_address_response_plugin" type="Codezspark\Customer\Plugin\CustomerAddressResponsePlugin" sortOrder="40" disabled="false"/>
     </type>
     <type name="Magento\Customer\Api\AccountManagementInterface">
-        <plugin name="custom_create_account_response" type="Codezspark\Customer\Plugin\CreateAccountPlugin" sortOrder="40" disabled="false"/>
+        <plugin name="custom_create_account_response" type="Codezspark\Customer\Plugin\CreateAccountPlugin" sortOrder="50" disabled="false"/>
     </type>
     <type name="Magento\Webapi\Controller\Rest\InputParamsResolver">
-        <plugin name="extract_mobile_number" type="Codezspark\Customer\Plugin\InputParamsResolverPlugin" sortOrder="50" disabled="false"/>
+        <plugin name="extract_mobile_number" type="Codezspark\Customer\Plugin\InputParamsResolverPlugin" sortOrder="60" disabled="false"/>
     </type>
     <type name="Magento\Integration\Api\AdminTokenServiceInterface">
-        <plugin name="codezspark_admin_token_response_plugin" type="Codezspark\Customer\Plugin\AdminTokenPlugin" sortOrder="60" disabled="false"/>
+        <plugin name="codezspark_admin_token_response_plugin" type="Codezspark\Customer\Plugin\AdminTokenPlugin" sortOrder="70" disabled="false"/>
     </type>
     <type name="Magento\Catalog\Api\CategoryManagementInterface">
-        <plugin name="codezspark_category_response_plugin" type="Codezspark\Customer\Plugin\CategoryResponsePlugin" sortOrder="70" disabled="false"/>
+        <plugin name="codezspark_category_response_plugin" type="Codezspark\Customer\Plugin\CategoryResponsePlugin" sortOrder="80" disabled="false"/>
+    </type>
+    <type name="Magento\Customer\Api\AddressRepositoryInterface">
+        <plugin name="customer_address_delete_response_plugin" type="Codezspark\Customer\Plugin\CustomerAddressDeleteResponsePlugin" sortOrder="90" disabled="false"/>
     </type>
 </config>
