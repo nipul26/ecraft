@@ -2,17 +2,25 @@
 namespace Codezspark\Customer\Plugin;
 
 use Magento\Customer\Api\Data\CustomerInterface;
-use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Psr\Log\LoggerInterface;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\LocalizedException;
 
 class MobileNumberUniquePlugin
 {
-    protected $customerCollectionFactory;
+    protected $logger;
+    protected $resourceConnection;
+    protected $inputParamsResolverPlugin;
 
-    public function __construct(CollectionFactory $customerCollectionFactory)
-    {
-        $this->customerCollectionFactory = $customerCollectionFactory;
+    public function __construct(
+        LoggerInterface $logger,
+        ResourceConnection $resourceConnection,
+        InputParamsResolverPlugin $inputParamsResolverPlugin
+    ) {
+        $this->logger = $logger;
+        $this->resourceConnection = $resourceConnection;
+        $this->inputParamsResolverPlugin = $inputParamsResolverPlugin;
     }
 
     public function beforeSave(
@@ -20,27 +28,34 @@ class MobileNumberUniquePlugin
         CustomerInterface $customer,
         $passwordHash = null
     ) {
-
-        // Get mobile number customer attribute value
-        $mobileNumberAttribute = $customer->getCustomAttribute('mobile_number');
-        $mobileNumber = $mobileNumberAttribute ? $mobileNumberAttribute->getValue() : null;
+        $mobileNumber = $this->inputParamsResolverPlugin->getMobileNumberFromRequest();
 
         if ($mobileNumber) {
-            $collection = $this->customerCollectionFactory->create();
-            $collection->addAttributeToFilter('mobile_number', $mobileNumber);
-
-            // Exclude same customer if updating
-            if ($customer->getId()) {
-                $collection->addFieldToFilter('entity_id', ['neq' => $customer->getId()]);
-            }
-
-            if ($collection->getSize() > 0) {
-                throw new LocalizedException(
-                    __('A customer with the same phone number already exists in an associated website.')
-                );
-            }
+            $this->validateMobileNumberUniqueness($mobileNumber, $customer->getId());
         }
 
         return [$customer, $passwordHash];
+    }
+
+    protected function validateMobileNumberUniqueness($mobileNumber, $currentCustomerId = null)
+    {
+        $connection = $this->resourceConnection->getConnection();
+        $tableName = $this->resourceConnection->getTableName('customer_entity');
+
+        $select = $connection->select()
+            ->from($tableName, ['entity_id'])
+            ->where('mobile_number = ?', $mobileNumber);
+
+        if ($currentCustomerId) {
+            $select->where('entity_id != ?', $currentCustomerId);
+        }
+
+        $existingCustomers = $connection->fetchAll($select);
+
+        if (count($existingCustomers) > 0) {
+            throw new LocalizedException(
+                __('A customer with the same phone number already exists')
+            );
+        }
     }
 }

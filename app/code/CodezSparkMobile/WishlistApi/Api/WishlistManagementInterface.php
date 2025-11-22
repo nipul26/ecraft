@@ -55,10 +55,10 @@ interface WishlistManagementInterface
      *
      * @param int $customerId
      * @param int $itemId
-     * @return bool
+     * @return mixed
      */
     public function delete(
         int $customerId,
         int $itemId
-    ): bool;
+    );
 }
