@@ -273,6 +273,10 @@
         .product-add-form {
             clear: both;
             padding-top: @indent__s + @indent__xs;
+
+            .box-tocart {
+                margin: 0 0 50px;
+            }
         }
 
         .product-reviews-summary {
@@ -392,6 +396,8 @@
         }
 
         .actions {
+            display: flex;
+            align-items: center;
         }
 
         .action.tocart {
@@ -399,20 +405,29 @@
             &:extend(.abs-button-responsive all);
 
             vertical-align: top;
+            margin-right: 20px;
         }
     }
 
     .product-addto-links {
-        display: inline;
+        display: flex;
+        line-height: 0;
 
         .action {
-            margin-right: 5%;
+            margin-right: 10px;
         }
     }
 
     .product-social-links {
-        margin: 0 0 20px;
-        text-align: center;
+        .product-addto-links {
+            display: flex;
+        }
+
+        a {
+            span {
+                .lib-text-hide();
+            }
+        }
 
         .action.tocompare {
             &:extend(.abs-actions-addto all);
@@ -598,6 +613,7 @@
                 font-size: 20px;
                 color: @color-gray34;
                 margin-bottom: 0;
+                text-transform: capitalize;
             }
         }
     }
@@ -668,8 +684,7 @@
     .box-tocart {
         .action.tocart {
             margin-bottom: 0;
-            margin-right: 1%;
-            width: 49%;
+            width: 100%;
         }
     }
 
@@ -1043,6 +1058,7 @@
     .compare.wrapper {
         float: right;
         .lib-list-reset-styles();
+        margin-top: 25px;
 
         .action.compare {
             line-height: @form-element-input__height;
