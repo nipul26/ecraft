@@ -6,6 +6,7 @@ use Magento\Integration\Model\CustomerTokenService;
 use Magento\Framework\Webapi\Rest\Response;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\App\ResourceConnection;
 
 class CustomerTokenPlugin
 {
@@ -20,15 +21,23 @@ class CustomerTokenPlugin
     protected $customerRepository;
 
     /**
+     * @var ResourceConnection
+     */
+    protected $resourceConnection;
+
+    /**
      * @param Response $response
      * @param CustomerRepositoryInterface $customerRepository
+     * @param ResourceConnection $resourceConnection
      */
     public function __construct(
         Response $response,
-        CustomerRepositoryInterface $customerRepository
+        CustomerRepositoryInterface $customerRepository,
+        ResourceConnection $resourceConnection
     ) {
         $this->response = $response;
         $this->customerRepository = $customerRepository;
+        $this->resourceConnection = $resourceConnection;
     }
 
     /**
@@ -48,9 +57,10 @@ class CustomerTokenPlugin
     ) {
         try {
             $customer = $this->customerRepository->get($username);
+            $customerId = $customer->getId();
 
-            $mobileNumber = $customer->getCustomAttribute('mobile_number');
-            $mobileNumberValue = $mobileNumber ? $mobileNumber->getValue() : null;
+            // Fetch mobile_number using SQL query
+            $mobileNumber = $this->getMobileNumberByCustomerId($customerId);
 
             $response = [
                 'status' => true,
@@ -61,7 +71,7 @@ class CustomerTokenPlugin
                     'firstname' => $customer->getFirstname(),
                     'lastname' => $customer->getLastname(),
                     'email' => $customer->getEmail(),
-                    'phone_number' => $mobileNumberValue
+                    'phone_number' => $mobileNumber
                 ]
             ];
         } catch (LocalizedException $e) {
@@ -75,5 +85,17 @@ class CustomerTokenPlugin
         }
 
         return $this->response->setBody(json_encode($response))->sendResponse();
+    }
+
+    protected function getMobileNumberByCustomerId($customerId)
+    {
+        $connection = $this->resourceConnection->getConnection();
+        $tableName  = $this->resourceConnection->getTableName('customer_entity');
+
+        $select = $connection->select()
+            ->from($tableName, ['mobile_number'])
+            ->where('entity_id = ?', $customerId);
+
+        return $connection->fetchOne($select);
     }
 }
