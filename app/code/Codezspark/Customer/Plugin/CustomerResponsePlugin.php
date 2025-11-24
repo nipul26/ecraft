@@ -130,7 +130,7 @@ class CustomerResponsePlugin
             $responseData = [
                 'status' => true,
                 'message' => 'Customer data fetched successfully.',
-                'data' => $customerData
+                'response' => $customerData
             ];
         } catch (LocalizedException $e) {
             $this->logger->error('Customer Response Plugin : ' . $e->getMessage());
