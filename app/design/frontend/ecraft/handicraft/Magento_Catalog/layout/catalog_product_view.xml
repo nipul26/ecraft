@@ -4,7 +4,7 @@
     <body>
 
         <referenceContainer name="product.info.main">
-            <container name="product.other.info" htmlClass="product-other-info" htmlTag="div" after="product.info.extrahint">
+            <container name="product.other.info" htmlClass="product-other-info" htmlTag="div" after="-">
                 <block class="Magento\Cms\Block\Block" name="product-other-info">
                     <arguments>
                         <argument name="block_id" xsi:type="string">product-other-info</argument>
@@ -14,6 +14,7 @@
         </referenceContainer>
 
         <move element="product.info.overview" destination="product.info.main" after="page.main.title"/>
+        <move element="product.info.social" destination="product.info.addtocart" after="-"/>
 
     </body>
 </page>
