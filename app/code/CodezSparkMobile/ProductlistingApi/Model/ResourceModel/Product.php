@@ -129,9 +129,9 @@ class Product extends AbstractResource
         \Magento\Eav\Model\Entity\TypeFactory $typeFactory,
         \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes,
         $data = [],
-        TableMaintainer $tableMaintainer = null,
-        UniqueValidationInterface $uniqueValidator = null,
-        AttributeManagementInterface $eavAttributeManagement = null,
+        ?TableMaintainer $tableMaintainer = null,
+        ?UniqueValidationInterface $uniqueValidator = null,
+        ?AttributeManagementInterface $eavAttributeManagement = null,
         ?\Magento\Catalog\Model\ResourceModel\MediaImageDeleteProcessor $mediaImageDeleteProcessor = null
     ) {
         $this->_categoryCollectionFactory = $categoryCollectionFactory;

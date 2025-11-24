@@ -375,11 +375,11 @@ class Productlist implements \CodezSparkMobile\ProductlistingApi\Api\Productlist
         \Magento\Framework\App\ResourceConnection $resourceConnection,
         // MobileApiHelperData $mobileApiHelperData,
         \Magento\Framework\Webapi\Rest\Request $request,
-        CollectionProcessorInterface $collectionProcessor = null,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        ?CollectionProcessorInterface $collectionProcessor = null,
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null,
         $cacheLimit = 1000,
-        ReadExtensions $readExtensions = null,
-        ? ScopeOverriddenValue $scopeOverriddenValue = null
+        ?ReadExtensions $readExtensions = null,
+        ?ScopeOverriddenValue $scopeOverriddenValue = null
     ) {
         $this->configurableFactory = $configurableFactory;
         $this->configurableResource = $configurableResource;
