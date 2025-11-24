@@ -232,7 +232,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      * @param \Magento\Catalog\Api\Data\ProductLinkInterface[] $links
      * @return $this
      */
-    public function setProductLinks(array $links = null);
+    public function setProductLinks(?array $links = null);
 
     /**
      * Get list of product options
@@ -247,7 +247,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      * @param \Magento\Catalog\Api\Data\ProductCustomOptionInterface[] $options
      * @return $this
      */
-    public function setOptions(array $options = null);
+    public function setOptions(?array $options = null);
 
     /**
      * Get media gallery entries
@@ -262,7 +262,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface[] $mediaGalleryEntries
      * @return $this
      */
-    public function setMediaGalleryEntries(array $mediaGalleryEntries = null);
+    public function setMediaGalleryEntries(?array $mediaGalleryEntries = null);
 
     /**
      * Gets list of product tier prices
@@ -277,7 +277,7 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      * @param \Magento\Catalog\Api\Data\ProductTierPriceInterface[] $tierPrices
      * @return $this
      */
-    public function setTierPrices(array $tierPrices = null);
+    public function setTierPrices(?array $tierPrices = null);
 
     /**
      * Get Product Badges
