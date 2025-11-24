@@ -26,4 +26,7 @@
     <type name="Magento\Customer\Api\AddressRepositoryInterface">
         <plugin name="customer_address_delete_response_plugin" type="Codezspark\Customer\Plugin\CustomerAddressDeleteResponsePlugin" sortOrder="90" disabled="false"/>
     </type>
+    <type name="Magento\Directory\Api\CountryInformationAcquirerInterface">
+        <plugin name="customer_address_country_region_response_plugin" type="Codezspark\Customer\Plugin\CountryRegionResponsePlugin" sortOrder="110" disabled="false"/>
+    </type>
 </config>
