@@ -60,7 +60,7 @@ class CustomerResponsePlugin
         if ($this->appState->getAreaCode() === \Magento\Framework\App\Area::AREA_WEBAPI_REST) {
             $pathInfo = $this->restRequest->getPathInfo();
             
-            if (strpos($pathInfo, '/V1/customers/me') !== false) {
+            if ($pathInfo === '/V1/customers/me') {
                 return $this->formatCustomerResponse($result);
             }
         }

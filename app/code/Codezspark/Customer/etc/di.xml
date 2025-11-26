@@ -13,6 +13,8 @@
     </type>
     <type name="Magento\Customer\Api\AccountManagementInterface">
         <plugin name="custom_create_account_response" type="Codezspark\Customer\Plugin\CreateAccountPlugin" sortOrder="50" disabled="false"/>
+        <plugin name="customer_shipping_address_response_plugin" type="Codezspark\Customer\Plugin\CustomerShippingAddressResponsePlugin" sortOrder="130" disabled="false"/>
+        <plugin name="customer_billing_address_response_plugin" type="Codezspark\Customer\Plugin\CustomerBillingAddressResponsePlugin" sortOrder="140" disabled="false"/>
     </type>
     <type name="Magento\Webapi\Controller\Rest\InputParamsResolver">
         <plugin name="extract_mobile_number" type="Codezspark\Customer\Plugin\InputParamsResolverPlugin" sortOrder="60" disabled="false"/>
@@ -28,5 +30,8 @@
     </type>
     <type name="Magento\Directory\Api\CountryInformationAcquirerInterface">
         <plugin name="customer_address_country_region_response_plugin" type="Codezspark\Customer\Plugin\CountryRegionResponsePlugin" sortOrder="110" disabled="false"/>
+    </type>
+    <type name="Magento\Directory\Api\CountryInformationAcquirerInterface">
+        <plugin name="customer_address_country_response_plugin" type="Codezspark\Customer\Plugin\CountryResponsePlugin" sortOrder="120" disabled="false"/>
     </type>
 </config>
