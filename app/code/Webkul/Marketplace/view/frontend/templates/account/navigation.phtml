@@ -608,7 +608,7 @@ if (!$helper->getIsSeparatePanel()) {
                             strpos($magentoCurrentUrl, 'marketplace/account/becomepartner')? "current":""
                         );?>">
                             <?php if (strpos($magentoCurrentUrl, 'marketplace/account/becomeseller') !== false) { ?>
-                                <strong><?= $escaper->escapeHtml(__('Become Seller')) ?></strong>
+                                <strong><?= $escaper->escapeHtml(__(' Become Seller')) ?></strong>
                             <?php } else { ?>
                                 <a href="<?= $escaper->escapeUrl($block
                                 ->getUrl('marketplace/account/becomeseller', ['_secure' => $block
