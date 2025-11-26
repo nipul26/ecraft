@@ -5,7 +5,7 @@ var config = {
         }
     },
     paths: {
-        'owlcarousel': 'js/owl.carousel.min'
+        'owlcarousel': 'owlcarousel/owl.carousel.min'
     },
     shim: {
         'owlcarousel': {

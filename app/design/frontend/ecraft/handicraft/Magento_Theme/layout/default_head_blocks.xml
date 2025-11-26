@@ -10,9 +10,9 @@
         <css src="css/styles-m.css"/>
         <css src="css/styles-l.css" media="screen and (min-width: 768px)"/>
         <css src="css/print.css" media="print"/>
-        <css src="css/owl.carousel.min.css" />
-        <css src="css/owl.theme.default.min.css" />
-        <script src="js/owl.carousel.min.js"/>
+        <css src="owlcarousel/owl.carousel.min.css" />
+        <css src="owlcarousel/owl.theme.default.min.css" />
+        <script src="owlcarousel/owl.carousel.min.js"/>
         <meta name="format-detection" content="telephone=no"/>
     </head>
 </page>

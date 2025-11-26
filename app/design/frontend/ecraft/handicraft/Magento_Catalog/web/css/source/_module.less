@@ -172,7 +172,7 @@
 
                 .price-container {
                     > span {
-                        display: block;
+                        display: inline-block;
                         margin-bottom: @indent__xs;
 
                         &:last-child {
@@ -352,6 +352,12 @@
 
             .price-container > span {
                 display: inline-block;
+            }
+            .price-label {
+                display: none;
+            }
+            .price-wrapper {
+                text-decoration: line-through;
             }
         }
 
@@ -614,6 +620,18 @@
                 color: @color-gray34;
                 margin-bottom: 0;
                 text-transform: capitalize;
+            }
+        }
+    }
+
+    .block.related {
+        .products-grid {
+            .product-item,
+            .product-item-info {
+                width: 100%;
+            }
+            .product-image-container {
+                width: 100%;
             }
         }
     }
