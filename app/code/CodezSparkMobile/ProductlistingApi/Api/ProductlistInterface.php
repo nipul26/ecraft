@@ -12,13 +12,13 @@ use CodezSparkMobile\ProductlistingApi\Api\Data\SettingDataInterface;
 interface ProductlistInterface
 {
     /**
-     * Get Product List
+     * Get product list
      *
-     * @param  string $storeId
-     * @param  string $filterData
-     * @param  string $currentPage
-     * @param  string $position
-     * @return SettingDataInterface
+     * @param string $storeId
+     * @param string|null $filterData
+     * @param int|null $currentPage
+     * @param string|null $position
+     * @return array
      */
     public function getList($storeId, $filterData = null, $currentPage = null, $position = null);
 }
