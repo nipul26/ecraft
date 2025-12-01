@@ -35,6 +35,7 @@ use Magento\Framework\Registry;
 // use CodezSparkMobile\MobileAppApi\Helper\Data as MobileApiHelperData;
 use Magento\ConfigurableProduct\Model\Product\Type\ConfigurableFactory;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable as ConfigurableResource;
+use Magento\Framework\Webapi\Rest\Response;
 
 /**
  * @inheritdoc
@@ -289,6 +290,11 @@ class Productlist implements \CodezSparkMobile\ProductlistingApi\Api\Productlist
     protected $configurableResource;
 
     /**
+     * @var Response
+     */
+    protected $response;
+
+    /**
      * Construct
      *
      * @param ProductFactory $productFactory
@@ -327,6 +333,7 @@ class Productlist implements \CodezSparkMobile\ProductlistingApi\Api\Productlist
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
      * @param \Magento\Framework\App\ResourceConnection $resourceConnection
      * @param \Magento\Framework\Webapi\Rest\Request $request
+     * @param Response $response
      * @param CollectionProcessorInterface $collectionProcessor = null
      * @param \Magento\Framework\Serialize\Serializer\Json $serializer = null
      * @param CacheLimit $cacheLimit
@@ -373,7 +380,7 @@ class Productlist implements \CodezSparkMobile\ProductlistingApi\Api\Productlist
         ImageProcessorInterface $imageProcessor,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
         \Magento\Framework\App\ResourceConnection $resourceConnection,
-        // MobileApiHelperData $mobileApiHelperData,
+        Response $response,
         \Magento\Framework\Webapi\Rest\Request $request,
         ?CollectionProcessorInterface $collectionProcessor = null,
         ?\Magento\Framework\Serialize\Serializer\Json $serializer = null,
@@ -420,6 +427,7 @@ class Productlist implements \CodezSparkMobile\ProductlistingApi\Api\Productlist
         $this->resourceConnection = $resourceConnection->getConnection();
         // $this->mobileApiHelperData = $mobileApiHelperData;
         $this->request = $request;
+        $this->response = $response;
         $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
@@ -507,7 +515,7 @@ class Productlist implements \CodezSparkMobile\ProductlistingApi\Api\Productlist
      * @param FilterData $filterData
      * @param CurrentPage $currentPage
      * @param Position $position
-     * @return SettingDataInterface
+     * @return array
      */
     public function getList($storeId, $filterData = null, $currentPage = null, $position = null)
     {
@@ -549,6 +557,9 @@ class Productlist implements \CodezSparkMobile\ProductlistingApi\Api\Productlist
             $category = $this->categoryFactory->create()->load($categoryId);
             $this->coreRegistry->register("current_category", $category);
 
+            if ($categoryId) {
+                $collection->addCategoriesFilter(['in' => $categoryId]);
+            }
             // if ($category->getLevel() == 4 && $category->hasChildren()) {
             //     $categoryIds = $category->getAllChildren();
             //     $categoryIds = explode(",", $categoryIds);
@@ -599,25 +610,47 @@ class Productlist implements \CodezSparkMobile\ProductlistingApi\Api\Productlist
             $collection->addCategoryIds();
             $this->addExtensionAttributes($collection);
 
-            $searchResult = $this->searchResultsFactory->create();
-            $searchResult->setTotalPages($totalPage);
-            $searchResult->setTotalProductCount($collection->getSize());
-            $searchResult->setTotalCountPerPage($collection->getPageSize());
-            $searchResult->setProductList($this->prepareItems($collection->getItems()));
+            // $searchResult = $this->searchResultsFactory->create();
+            $response['total_pages'] = $totalPage;
+            $response['total_product_count'] = $collection->getSize();
+            $response['total_count_per_page'] = $collection->getPageSize();
+            $response['product_list'] = $this->prepareItems($collection->getItems());
+            // $searchResult->setTotalPages($totalPage);
+            // $searchResult->setTotalProductCount($collection->getSize());
+            // $searchResult->setTotalCountPerPage($collection->getPageSize());
+            // $searchResult->setProductList($this->prepareItems($collection->getItems()));
             if ($collection->getSize() > 1) {
-                $searchResult->setFilterData($this->getFilterData($categoryId));
+                $response['filter_data'] = $this->getFilterData($categoryId);
+                // $searchResult->setFilterData($this->getFilterData($categoryId));
             } else {
-                $searchResult->setFilterData([]);
+                $response['filter_data'] = [];
+                // $searchResult->setFilterData([]);
             }
-            $searchResult->setSortingData($this->getSortingData());
-            $settingData->setResponseData($searchResult);
-            $settings->setCode(200);
-            $settings->setMessage(__('Product list get successfully.'));
-            $settingData->setSettings($settings);
+            $response['sorting_data'] = $this->getSortingData();
+
+            // $searchResult->setSortingData($this->getSortingData());
+            $data = [
+                "status"  => true,
+                "message" => "Product list get successfully.",
+                "data"    => $response
+            ];
+
+            return $this->response->setBody(json_encode($data))->sendResponse();
+            // $settingData->setResponseData($searchResult);
+            // $settings->setCode(200);
+            // $settings->setMessage(__('Product list get successfully.'));
+            // $settingData->setSettings($settings);
         } catch (\Exception $e) {
-            $settings->setCode(400);
-            $settings->setMessage($e->getMessage());
-            $settingData->setSettings($settings);
+            $data =  [
+                "status"  => false,
+                "message" => $e->getMessage(),
+                "data"    => []
+            ];
+
+            return $this->response->setBody(json_encode($data))->sendResponse();
+            // $settings->setCode(400);
+            // $settings->setMessage($e->getMessage());
+            // $settingData->setSettings($settings);
         }
 
         return $settingData;
@@ -780,10 +813,11 @@ class Productlist implements \CodezSparkMobile\ProductlistingApi\Api\Productlist
                 $configurableOptions = [];
 
                 foreach ($attributes as $attribute) {
-
                     $values = [];
                     foreach ($attribute->getOptions() as $opt) {
+                        
                         $values[] = [
+                            'default_label' => $opt['default_label'],
                             'value_index' => $opt['value_index']
                         ];
                     }
