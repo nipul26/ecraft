@@ -23,6 +23,7 @@
         "magento/product-community-edition": "2.4.8-p2",
         "mageplaza/magento-2-social-login": "^4.1",
         "mageplaza/module-banner-slider": "^4.1",
+        "razorpay/magento": "^4.1",
         "stripe/stripe-payments": "^4.5"
     },
     "autoload": {
