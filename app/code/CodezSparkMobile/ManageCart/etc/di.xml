@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <!-- Create Empty Cart For Customer -->
+    <type name="Magento\Quote\Api\CartManagementInterface">
+        <plugin name="codezspark_customer_create_empty_cart_for_customer" type="CodezSparkMobile\ManageCart\Plugin\CreateEmptyCartForCustomer" sortOrder="10" disabled="false"/>
+    </type>
+
+    <!-- Add to cart API -->
+    <type name="Magento\Quote\Api\CartItemRepositoryInterface">
+        <plugin name="codezspark_customer_add_to_cart" type="CodezSparkMobile\ManageCart\Plugin\AddToCart" sortOrder="10" disabled="false"/>
+    </type>
+
+</config>
