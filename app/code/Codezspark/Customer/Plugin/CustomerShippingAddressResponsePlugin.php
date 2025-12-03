@@ -30,7 +30,7 @@ class CustomerShippingAddressResponsePlugin
 
     public function afterGetDefaultShippingAddress(
         AccountManagementInterface $subject,
-        AddressInterface $result
+        ?AddressInterface $result
     ) {
         try {
             if (!$result || !$result instanceof AddressInterface) {
