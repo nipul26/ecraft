@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <preference for="CodezSparkMobile\CustomerProfileEditApi\Api\Data\ProfileResponseInterface"
+                type="CodezSparkMobile\CustomerProfileEditApi\Model\Data\ProfileResponse"/>
+    
+    <preference for="CodezSparkMobile\CustomerProfileEditApi\Api\Data\CustomerDataInterface"
+                type="CodezSparkMobile\CustomerProfileEditApi\Model\Data\CustomerData"/>
+    
+    <preference for="CodezSparkMobile\CustomerProfileEditApi\Api\ProfileManagementInterface"
+                type="CodezSparkMobile\CustomerProfileEditApi\Model\ProfileManagement"/>
+
+</config>
