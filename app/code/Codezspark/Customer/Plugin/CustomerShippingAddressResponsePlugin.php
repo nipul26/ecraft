@@ -5,6 +5,8 @@ namespace Codezspark\Customer\Plugin;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Framework\Webapi\Rest\Response;
+use Magento\Framework\App\State;
+use Magento\Framework\Webapi\Rest\Request;
 use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
 
@@ -16,15 +18,29 @@ class CustomerShippingAddressResponsePlugin
     protected $response;
 
     /**
+     * @var State
+     */
+    protected $appState;
+
+    /**
+     * @var Request
+     */
+    protected $restRequest;
+
+    /**
      * @var LoggerInterface
      */
     protected $logger;
 
     public function __construct(
         Response $response,
+        State $appState,
+        Request $restRequest,
         LoggerInterface $logger
     ) {
         $this->response = $response;
+        $this->appState = $appState;
+        $this->restRequest = $restRequest;
         $this->logger   = $logger;
     }
 
@@ -33,6 +49,18 @@ class CustomerShippingAddressResponsePlugin
         ?AddressInterface $result
     ) {
         try {
+            if ($this->appState->getAreaCode() !== \Magento\Framework\App\Area::AREA_WEBAPI_REST) {
+                $method = $this->restRequest->getHttpMethod();
+                if ($method !== 'GET') {
+                    return $result;
+                }
+
+                $pathInfo = $this->restRequest->getPathInfo();
+                if ($pathInfo !== '/V1/customers/me/shippingAddress') {
+                    return $result;
+                }
+            }
+            
             if (!$result || !$result instanceof AddressInterface) {
                 $responseData = [
                     'status' => false,
