@@ -30,7 +30,7 @@ class CustomerBillingAddressResponsePlugin
 
     public function aftergetDefaultBillingAddress(
         AccountManagementInterface $subject,
-        AddressInterface $result
+        ?AddressInterface $result
     ) {
         try {
             if (!$result || !$result instanceof AddressInterface) {
