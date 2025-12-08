@@ -6,6 +6,7 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Webapi\Rest\Response;
 use Magento\Framework\Webapi\Rest\Request;
+use Magento\Framework\App\State as AppState;
 use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
 
@@ -26,13 +27,20 @@ class CustomerAddressResponsePlugin
      */
     protected $request;
 
+    /** 
+     * @var State 
+     */
+    protected $appState;
+
     public function __construct(
         Response $response,
         Request $request,
+        AppState $appState,
         LoggerInterface $logger
     ) {
         $this->response = $response;
         $this->request = $request;
+        $this->appState  = $appState;
         $this->logger = $logger;
     }
 
@@ -45,6 +53,11 @@ class CustomerAddressResponsePlugin
             $method = $this->request->getHttpMethod();
 
             if ($method !== 'PUT') {
+                return $result;
+            }
+
+            $pathInfo = $this->request->getPathInfo();
+            if (!preg_match('#^/V1/customers/\d+$#', $pathInfo)) {
                 return $result;
             }
 
