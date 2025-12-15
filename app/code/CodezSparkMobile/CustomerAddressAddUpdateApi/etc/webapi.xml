@@ -14,4 +14,11 @@
             <resource ref="self"/>
         </resources>
     </route>
+
+    <route url="/V1/customers/addresses/:addressId" method="DELETE">
+        <service class="Magento\Customer\Api\AddressRepositoryInterface" method="deleteById"/>
+        <resources>
+            <resource ref="self"/>
+        </resources>
+    </route>
 </routes>
