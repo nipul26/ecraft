@@ -36,6 +36,8 @@ use Magento\Framework\Registry;
 use Magento\ConfigurableProduct\Model\Product\Type\ConfigurableFactory;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable as ConfigurableResource;
 use Magento\Framework\Webapi\Rest\Response;
+use Magento\Authorization\Model\UserContextInterface;
+use Magento\Wishlist\Model\ResourceModel\Item\CollectionFactory as WishlistItemCollectionFactory;
 
 /**
  * @inheritdoc
@@ -294,6 +296,10 @@ class Productlist implements \CodezSparkMobile\ProductlistingApi\Api\Productlist
      */
     protected $response;
 
+    protected $userContext;
+    protected $wishlistItemCollectionFactory;
+
+
     /**
      * Construct
      *
@@ -381,6 +387,8 @@ class Productlist implements \CodezSparkMobile\ProductlistingApi\Api\Productlist
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
         \Magento\Framework\App\ResourceConnection $resourceConnection,
         Response $response,
+        UserContextInterface $userContext,
+        WishlistItemCollectionFactory $wishlistItemCollectionFactory,
         \Magento\Framework\Webapi\Rest\Request $request,
         ?CollectionProcessorInterface $collectionProcessor = null,
         ?\Magento\Framework\Serialize\Serializer\Json $serializer = null,
@@ -428,6 +436,8 @@ class Productlist implements \CodezSparkMobile\ProductlistingApi\Api\Productlist
         // $this->mobileApiHelperData = $mobileApiHelperData;
         $this->request = $request;
         $this->response = $response;
+        $this->userContext = $userContext;
+        $this->wishlistItemCollectionFactory = $wishlistItemCollectionFactory;
         $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
@@ -606,6 +616,10 @@ class Productlist implements \CodezSparkMobile\ProductlistingApi\Api\Productlist
                 $collection->addStoreFilter($storeId);
             }
             $collection->load();
+
+            $customerId  = $this->getCustomerId();
+            $wishlistMap = $this->getWishlistMap($customerId);
+
             $totalPage = ceil($collection->getSize() / $collection->getPageSize());
             $collection->addCategoryIds();
             $this->addExtensionAttributes($collection);
@@ -614,7 +628,11 @@ class Productlist implements \CodezSparkMobile\ProductlistingApi\Api\Productlist
             $response['total_pages'] = $totalPage;
             $response['total_product_count'] = $collection->getSize();
             $response['total_count_per_page'] = $collection->getPageSize();
-            $response['product_list'] = $this->prepareItems($collection->getItems());
+            //$response['product_list'] = $this->prepareItems($collection->getItems());
+            $response['product_list'] = $this->prepareItems(
+                $collection->getItems(),
+                $wishlistMap
+            );
             // $searchResult->setTotalPages($totalPage);
             // $searchResult->setTotalProductCount($collection->getSize());
             // $searchResult->setTotalCountPerPage($collection->getPageSize());
@@ -629,6 +647,7 @@ class Productlist implements \CodezSparkMobile\ProductlistingApi\Api\Productlist
             $response['sorting_data'] = $this->getSortingData();
 
             // $searchResult->setSortingData($this->getSortingData());
+
             $data = [
                 "status"  => true,
                 "message" => "Product list get successfully.",
@@ -654,6 +673,31 @@ class Productlist implements \CodezSparkMobile\ProductlistingApi\Api\Productlist
         }
 
         return $settingData;
+    }
+
+    private function getCustomerId(): ?int
+    {
+        return $this->userContext->getUserType() === UserContextInterface::USER_TYPE_CUSTOMER
+            ? (int)$this->userContext->getUserId()
+            : null;
+    }
+
+    private function getWishlistMap(?int $customerId): array
+    {
+        if (!$customerId) {
+            return [];
+        }
+
+        $collection = $this->wishlistItemCollectionFactory->create();
+        $collection->addCustomerIdFilter($customerId);
+        $collection->addFieldToSelect(['product_id', 'wishlist_item_id']);
+
+        $map = [];
+        foreach ($collection as $item) {
+            $map[(int)$item->getProductId()] = (int)$item->getId();
+        }
+
+        return $map;
     }
 
     /**
@@ -737,7 +781,7 @@ class Productlist implements \CodezSparkMobile\ProductlistingApi\Api\Productlist
     /**
      * @inheritDoc
      */
-    protected function prepareItems($items)
+    protected function prepareItems(array $items, array $wishlistMap): array
     {
         $itemList = [];
         foreach ($items as $item) {
@@ -800,6 +844,15 @@ class Productlist implements \CodezSparkMobile\ProductlistingApi\Api\Productlist
             // $products->setData('is_in_stock', $IsInStock ? true : false);
             // $products->setData('availability', $IsInStock ? 'In Stock' : 'Out Of Stock');
             $products->setData('type_id', $item->getData('type_id'));
+
+            $productId = (int)$item->getId();
+
+            $isInWishlist   = isset($wishlistMap[$productId]);
+            $wishlistItemId = $isInWishlist ? (int)$wishlistMap[$productId] : null;
+
+            $products->setData('is_in_wishlist', $isInWishlist);
+            $products->setData('wishlist_item_id', $wishlistItemId);
+
             //$itemList[] = $products->getData();
 
             if ($item->getTypeId() === 'configurable') {
@@ -916,11 +969,10 @@ class Productlist implements \CodezSparkMobile\ProductlistingApi\Api\Productlist
                 $filterData->setMinRange('');
                 $filterData->setMaxRange('');
                 $filterData->setOptions($optionList);
-                $filterList[] = $filterData;
+                $filterList[] = $filterData->getData();
             }
         }
-
-        return $filterList;
+        return  $filterList;
     }
 
     /**
@@ -928,23 +980,24 @@ class Productlist implements \CodezSparkMobile\ProductlistingApi\Api\Productlist
      */
     public function getSortingData()
     {
-        $priceHighLow = $this->sortingDataInterfaceFactory->create();
-        $priceHighLow->setCode('price_high_low');
-        $priceHighLow->setLabel('Price: High - Low');
-        $sortList[0] = $priceHighLow;
-        $priceLowHigh = $this->sortingDataInterfaceFactory->create();
-        $priceLowHigh->setCode('price_low_high');
-        $priceLowHigh->setLabel('Price: Low - High');
-        $sortList[1] = $priceLowHigh;
-        $productAz = $this->sortingDataInterfaceFactory->create();
-        $productAz->setCode('product_a_z');
-        $productAz->setLabel('Product A to Z');
-        $sortList[2] = $productAz;
-        $priceZa = $this->sortingDataInterfaceFactory->create();
-        $priceZa->setCode('product_z_a');
-        $priceZa->setLabel('Product Z to A');
-        $sortList[3] = $priceZa;
-        return $sortList;
+        return [
+            [
+                'code'  => 'price_high_low',
+                'label' => 'Price: High - Low'
+            ],
+            [
+                'code'  => 'price_low_high',
+                'label' => 'Price: Low - High'
+            ],
+            [
+                'code'  => 'product_a_z',
+                'label' => 'Product A to Z'
+            ],
+            [
+                'code'  => 'product_z_a',
+                'label' => 'Product Z to A'
+            ]
+        ];
     }
 
     /**
@@ -987,7 +1040,6 @@ class Productlist implements \CodezSparkMobile\ProductlistingApi\Api\Productlist
             $store
         );
     }
-
 
     public function checkPriceTax($product, $priceValue, $store = null){
         $getPriceType = $this->getPriceDisplayType($store);
