@@ -13,6 +13,7 @@ use Psr\Log\LoggerInterface;
 use Webkul\Marketplace\Helper\Data as MarketplaceHelper;
 use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Review\Model\Review\SummaryFactory;
 
 class ProductDetailResponsePlugin
 {
@@ -51,6 +52,11 @@ class ProductDetailResponsePlugin
      */
     protected $attributeRepository;
 
+    /**
+     * @var SummaryFactory
+     */
+    protected $reviewSummaryFactory;
+
     public function __construct(
         Response $response,
         Request $request,
@@ -58,7 +64,8 @@ class ProductDetailResponsePlugin
         LoggerInterface $logger,
         DataObjectProcessor $dataObjectProcessor,
         MarketplaceHelper $marketplaceHelper,
-        AttributeRepositoryInterface $attributeRepository
+        AttributeRepositoryInterface $attributeRepository,
+        SummaryFactory $reviewSummaryFactory,
     ) {
         $this->response = $response;
         $this->request = $request;
@@ -67,6 +74,7 @@ class ProductDetailResponsePlugin
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->marketplaceHelper = $marketplaceHelper;
         $this->attributeRepository = $attributeRepository;
+        $this->reviewSummaryFactory = $reviewSummaryFactory;
     }
 
     public function afterGet(
@@ -133,11 +141,20 @@ class ProductDetailResponsePlugin
                     // 'shop_logo'   => $seller->getLogoPic() ?? '',
                     // 'product_count' => $sellerProductCount['product_count']
                 ];
+
+                $summaryModel = $this->reviewSummaryFactory->create()
+                    ->setStoreId($result->getStoreId())
+                    ->load($result->getId());
+                $ratingSummary = $summaryModel->getRatingSummary();
+                $starRating = $ratingSummary ? ($ratingSummary / 20) : 0;
    
                 $response = [
                     'status' => true,
                     'message' => 'Product Details fetched successfully.',
-                    'response' => array_merge($dataArray, ['seller' => $sellerData]) 
+                    'response' => array_merge($dataArray, [
+                        'seller' => $sellerData,
+                        'average_rating' => round($starRating, 1)
+                    ]) 
                 ];
             } else {
                 $response = [

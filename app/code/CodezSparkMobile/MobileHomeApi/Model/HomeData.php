@@ -13,6 +13,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Mageplaza\BannerSlider\Model\ResourceModel\Slider\CollectionFactory as SliderCollectionFactory;
 use Mageplaza\BannerSlider\Model\ResourceModel\Banner\CollectionFactory as BannerCollectionFactory;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Review\Model\Review\SummaryFactory;
 
 class HomeData implements HomeDataInterface
 {
@@ -26,6 +27,7 @@ class HomeData implements HomeDataInterface
     protected $sliderCollectionFactory;
     protected $bannerCollectionFactory;
     protected $resource;
+    protected $reviewSummaryFactory;
 
     public function __construct(
         CollectionFactory $productCollectionFactory,
@@ -37,7 +39,8 @@ class HomeData implements HomeDataInterface
         PriceCurrencyInterface $priceCurrency,
         SliderCollectionFactory $sliderCollectionFactory,
         BannerCollectionFactory $bannerCollectionFactory,
-        ResourceConnection $resource
+        ResourceConnection $resource,
+        SummaryFactory $reviewSummaryFactory,
     ) {
         $this->productCollectionFactory = $productCollectionFactory;
         $this->blockRepository = $blockRepository;
@@ -49,6 +52,7 @@ class HomeData implements HomeDataInterface
         $this->sliderCollectionFactory = $sliderCollectionFactory;
         $this->bannerCollectionFactory = $bannerCollectionFactory;
         $this->resource = $resource;
+        $this->reviewSummaryFactory = $reviewSummaryFactory;
     }
 
     /**
@@ -84,16 +88,6 @@ class HomeData implements HomeDataInterface
     }
 
     /**
-     * Get newest products
-     */
-    private function getNewestProducts($limit, $mediaBase)
-    {
-        $collection = $this->initProductCollection($limit);
-        $collection->setOrder('created_at', 'DESC');
-        return $this->formatProductCollection($collection, $mediaBase);
-    }
-
-    /**
      * Get products by custom attribute
      */
     private function getProductsByAttribute($attributeCode, $value, $limit, $mediaBase)
@@ -124,6 +118,7 @@ class HomeData implements HomeDataInterface
     {
         $products = [];
         $currency = $this->storeManager->getStore()->getCurrentCurrencyCode();
+        $storeId = $this->storeManager->getStore()->getId();
 
         foreach ($collection as $product) {
             $price = (int) $product->getPrice();
@@ -136,11 +131,20 @@ class HomeData implements HomeDataInterface
                 $currency
             );
 
+            $summaryModel = $this->reviewSummaryFactory->create()
+                ->setStoreId($storeId)
+                ->load($product->getId());
+            $ratingSummary = $summaryModel->getRatingSummary();
+
+            $starRating = $ratingSummary ? ($ratingSummary / 20) : 0;
+
             $products[] = [
-                //'id' => $product->getId(),
+                'id' => $product->getId(),
                 'name' => $product->getName(),
+                'sku' => $product->getSku(),
                 'price' => $formattedPrice,
-                'image_url' => $mediaBase . 'catalog/product' . $product->getSmallImage()
+                'image_url' => $mediaBase . 'catalog/product' . $product->getSmallImage(),
+                'average_rating' => round($starRating, 1)
             ];
         }
 
@@ -156,7 +160,6 @@ class HomeData implements HomeDataInterface
             return '';
         }
     }
-
 
     /**
      * Get all active sliders with their mobile-active banners

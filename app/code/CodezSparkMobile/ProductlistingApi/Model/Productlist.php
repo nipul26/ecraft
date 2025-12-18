@@ -38,6 +38,7 @@ use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable as
 use Magento\Framework\Webapi\Rest\Response;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Wishlist\Model\ResourceModel\Item\CollectionFactory as WishlistItemCollectionFactory;
+use Magento\Review\Model\Review\SummaryFactory;
 
 /**
  * @inheritdoc
@@ -287,8 +288,14 @@ class Productlist implements \CodezSparkMobile\ProductlistingApi\Api\Productlist
      */
     protected $request;
 
+    /**
+     * @var ConfigurableFactory
+     */
     protected $configurableFactory;
 
+    /**
+     * @var Configurable
+     */
     protected $configurableResource;
 
     /**
@@ -296,13 +303,26 @@ class Productlist implements \CodezSparkMobile\ProductlistingApi\Api\Productlist
      */
     protected $response;
 
+    /**
+     * @var UserContextInterface
+     */
     protected $userContext;
+
+    /**
+     * @var CollectionFactory
+     */
     protected $wishlistItemCollectionFactory;
 
+    /**
+     * @var SummaryFactory
+     */
+    protected $reviewSummaryFactory;
 
     /**
      * Construct
      *
+     * @param ConfigurableFactory $configurableFactory
+     * @param ConfigurableResource $configurableResource
      * @param ProductFactory $productFactory
      * @param SettingDataInterfaceFactory $settingDataInterfaceFactory
      * @param SettingsInterfaceFactory $settingsInterfaceFactory
@@ -340,12 +360,14 @@ class Productlist implements \CodezSparkMobile\ProductlistingApi\Api\Productlist
      * @param \Magento\Framework\App\ResourceConnection $resourceConnection
      * @param \Magento\Framework\Webapi\Rest\Request $request
      * @param Response $response
+     * @param UserContextInterface $userContext
+     * @param WishlistItemCollectionFactory $wishlistItemCollectionFactory
+     * @param SummaryFactory $summaryFactory
      * @param CollectionProcessorInterface $collectionProcessor = null
      * @param \Magento\Framework\Serialize\Serializer\Json $serializer = null
      * @param CacheLimit $cacheLimit
      * @param ReadExtensions $readExtensions = null
      * @param ScopeOverriddenValue $scopeOverriddenValue = null
-     *
      */
 
     public function __construct(
@@ -389,6 +411,7 @@ class Productlist implements \CodezSparkMobile\ProductlistingApi\Api\Productlist
         Response $response,
         UserContextInterface $userContext,
         WishlistItemCollectionFactory $wishlistItemCollectionFactory,
+        SummaryFactory $reviewSummaryFactory,
         \Magento\Framework\Webapi\Rest\Request $request,
         ?CollectionProcessorInterface $collectionProcessor = null,
         ?\Magento\Framework\Serialize\Serializer\Json $serializer = null,
@@ -438,6 +461,7 @@ class Productlist implements \CodezSparkMobile\ProductlistingApi\Api\Productlist
         $this->response = $response;
         $this->userContext = $userContext;
         $this->wishlistItemCollectionFactory = $wishlistItemCollectionFactory;
+        $this->reviewSummaryFactory = $reviewSummaryFactory;
         $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
@@ -852,6 +876,14 @@ class Productlist implements \CodezSparkMobile\ProductlistingApi\Api\Productlist
 
             $products->setData('is_in_wishlist', $isInWishlist);
             $products->setData('wishlist_item_id', $wishlistItemId);
+
+            $summaryModel = $this->reviewSummaryFactory->create()
+                ->setStoreId($storeId)
+                ->load($item->getId());
+            $ratingSummary = $summaryModel->getRatingSummary();
+            $starRating = $ratingSummary ? ($ratingSummary / 20) : 0;
+
+            $products->setData('average_rating', round($starRating, 1));
 
             //$itemList[] = $products->getData();
 
