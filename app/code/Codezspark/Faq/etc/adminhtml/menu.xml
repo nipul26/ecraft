@@ -1,0 +1,57 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * CodezSpark
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the codezspark.com license that is
+ * available through the world-wide-web at this URL:
+ * https://codezspark.com/end-user-license-agreement
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    CodezSpark
+ * @package     Codezspark_Faq
+ * @copyright   Copyright (c) CodezSpark (https://codezspark.com/)
+ * @license     https://codezspark.com/end-user-license-agreement
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+	<menu>
+        <add id="Codezspark_Faq::menu"
+             title="Codezspark FAQ"
+             translate="title"
+             module="Codezspark_Faq"
+             parent="Magento_Backend::content"
+             sortOrder="80"
+             resource="Codezspark_Faq::menu"/>
+		<add id="Codezspark_Faq::faqgroup"
+			 action="codezspark_faq/faqgroup/index"
+			 module="Codezspark_Faq"
+			 parent="Codezspark_Faq::menu"
+			 resource="Codezspark_Faq::FaqGroup"
+			 sortOrder="10"
+			 translate="title"
+			 title="Manage FAQ Group"/>
+		<add id="Codezspark_Faq::faq"
+			 action="codezspark_faq/faq/index"
+			 module="Codezspark_Faq"
+			 parent="Codezspark_Faq::menu"
+			 resource="Codezspark_Faq::Faq"
+			 sortOrder="20"
+			 translate="title"
+			 title="Manage FAQ"/>
+        <add id="Codezspark_Faq::configuration"
+			 action="adminhtml/system_config/edit/section/faqtab"
+			 module="Codezspark_Faq"
+			 parent="Codezspark_Faq::menu"
+			 resource="Codezspark_Faq::Configuration"
+			 sortOrder="30"
+			 translate="title"
+			 title="Configuration"/>
+	</menu>
+</config>

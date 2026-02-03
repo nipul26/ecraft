@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * CodezSpark
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the codezspark.com license that is
+ * available through the world-wide-web at this URL:
+ * https://codezspark.com/end-user-license-agreement
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    CodezSpark
+ * @package     Codezspark_Faq
+ * @copyright   Copyright (c) CodezSpark (https://codezspark.com/)
+ * @license     https://codezspark.com/end-user-license-agreement
+ */
+ -->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+	<update handle="styles"/>
+	<body>
+		<referenceContainer name="content">
+			<uiComponent name="codezspark_faqgroup_index"/>
+		</referenceContainer>
+	</body>
+</page>
