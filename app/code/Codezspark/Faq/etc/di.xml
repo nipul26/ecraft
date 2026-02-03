@@ -1,0 +1,62 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * CodezSpark
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the codezspark.com license that is
+ * available through the world-wide-web at this URL:
+ * https://codezspark.com/end-user-license-agreement
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this extension to newer
+ * version in the future.
+ *
+ * @category    CodezSpark
+ * @package     Codezspark_Faq
+ * @copyright   Copyright (c) CodezSpark (https://codezspark.com/)
+ * @license     https://codezspark.com/end-user-license-agreement
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Codezspark\Faq\Api\FaqRepositoryInterface" type="Codezspark\Faq\Model\FaqRepository"/>
+    <preference for="Codezspark\Faq\Api\Data\FaqInterface" type="Codezspark\Faq\Model\Faq"/>
+    <preference for="Codezspark\Faq\Api\Data\FaqSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+	<preference for="Codezspark\Faq\Api\FaqGroupRepositoryInterface" type="Codezspark\Faq\Model\FaqGroupRepository"/>
+	<preference for="Codezspark\Faq\Api\Data\FaqGroupInterface" type="Codezspark\Faq\Model\FaqGroup"/>
+	<preference for="Codezspark\Faq\Api\Data\FaqGroupSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+	<virtualType name="Codezspark\Faq\Model\ResourceModel\FaqGroup\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+		<arguments>
+			<argument name="mainTable" xsi:type="string">prince_faqgroup</argument>
+			<argument name="resourceModel" xsi:type="string">Codezspark\Faq\Model\ResourceModel\FaqGroup\Collection</argument>
+		</arguments>
+	</virtualType>
+	<type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+		<arguments>
+			<argument name="collections" xsi:type="array">
+				<item name="codezspark_faqgroup_grid_data_source" xsi:type="string">Codezspark\Faq\Model\ResourceModel\FaqGroup\Grid\Collection</item>
+				<item name="codezspark_faq_grid_data_source" xsi:type="string">Codezspark\Faq\Model\ResourceModel\Faq\Grid\Collection</item>
+			</argument>
+		</arguments>
+	</type>
+	<virtualType name="Codezspark\Faq\Model\ResourceModel\Faq\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+		<arguments>
+			<argument name="mainTable" xsi:type="string">prince_faq</argument>
+			<argument name="resourceModel" xsi:type="string">Codezspark\Faq\Model\ResourceModel\Faq\Collection</argument>
+		</arguments>
+	</virtualType>
+	<type name="Codezspark\Faq\Model\ImageUploader">
+		<arguments>
+			<argument name="baseTmpPath" xsi:type="string">faq/tmp/icon</argument>
+			<argument name="basePath" xsi:type="string">faq/icon</argument>
+			<argument name="allowedExtensions" xsi:type="array">
+				<item name="jpg" xsi:type="string">jpg</item>
+				<item name="jpeg" xsi:type="string">jpeg</item>
+				<item name="gif" xsi:type="string">gif</item>
+				<item name="png" xsi:type="string">png</item>
+			</argument>
+		</arguments>
+	</type>
+</config>
