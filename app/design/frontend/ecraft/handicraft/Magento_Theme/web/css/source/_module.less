@@ -617,11 +617,29 @@
         }
     }
 
+    .artist-section {
+        margin-bottom: 80px;
+
+        .item-box {
+            border: 1px solid @color-gray76;
+
+            .item-content {
+                padding: 15px;
+
+                .artist-name {
+                    font-size: 16px;
+                    font-weight: @font-weight__semibold;
+                }
+            }
+        }
+    }
+
     @media only screen and (min-width: @screen__m) and (max-width: (@screen__l - 1)) {
         .hero-owl-slider, 
         .shop-by-categories-section,
         .promotion-section,
-        .hot-seller-section {
+        .hot-seller-section,
+        .artist-section {
             margin-bottom: 60px;
         }
 
@@ -793,7 +811,8 @@
     .hero-owl-slider,
     .shop-by-categories-section,
     .promotion-section,
-    .hot-seller-section {
+    .hot-seller-section,
+    .artist-section {
         margin-bottom: 40px;
     }
 
@@ -894,7 +913,21 @@
             }
         }
     }
+    .mobile-nav-close {
+        display: none;
+        position: absolute;
+        left: 0;
+        top: 0;
+        border: 0;
+        border-radius: 0;
+        z-index: 99;  
+    }
 
+    .nav-before-open.nav-open {
+        .mobile-nav-close {
+            display: block;   
+        }
+    }
 }
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
@@ -1183,5 +1216,9 @@
                 }
             }
         }
+    }
+
+    .mobile-nav-close {
+        display: none;   
     }
 }
