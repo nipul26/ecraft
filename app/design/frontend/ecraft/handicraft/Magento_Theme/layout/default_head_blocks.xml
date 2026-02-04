@@ -13,6 +13,7 @@
         <css src="owlcarousel/owl.carousel.min.css" />
         <css src="owlcarousel/owl.theme.default.min.css" />
         <script src="owlcarousel/owl.carousel.min.js"/>
+        <script src="js/sticky-navbar.js"/>
         <meta name="format-detection" content="telephone=no"/>
     </head>
 </page>

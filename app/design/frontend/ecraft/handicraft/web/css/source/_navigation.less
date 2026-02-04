@@ -297,6 +297,12 @@
         .lib-vendor-prefix-flex-shrink(0);
         .lib-vendor-prefix-flex-basis(auto);
         margin-bottom: @indent__m;
+
+        &.is-sticky {
+            position: sticky;
+            top: 0;
+            z-index: 99;
+        }
     }
 
     .nav-sections-item-title {

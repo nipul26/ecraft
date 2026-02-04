@@ -5,5 +5,13 @@
     <body>
         <referenceBlock name="search-term-popular-link" remove="true" />
         <referenceBlock name="catalog-search-advanced-link" remove="true" />
+
+        <referenceContainer name="page.top">
+            <block class="Magento\Cms\Block\Block" name="hide.navigation.on.mobile" >
+                <arguments>
+                    <argument name="block_id" xsi:type="string">hide-navigation-on-mobile</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
     </body>
 </page>
